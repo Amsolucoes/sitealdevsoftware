@@ -66,6 +66,12 @@ a { color: inherit; text-decoration: none; }
   transition: transform .12s, background .15s;
 }
 .nav-cta:hover { background: var(--amber-bright); transform: translateY(-1px); }
+.nav-login {
+  font-size: 14px; color: var(--text-1) !important; font-weight: 500;
+  padding: 9px 16px; border-radius: 8px; border: 1px solid var(--border);
+  transition: border-color .15s, background .15s;
+}
+.nav-login:hover { border-color: var(--amber-border); background: var(--amber-soft); }
 .nav-toggle { display: none; background: none; border: none; color: var(--text-1); cursor: pointer; font-size: 22px; }
 
 @media (max-width: 800px) {
@@ -236,3 +242,48 @@ a { color: inherit; text-decoration: none; }
 
 .reveal { opacity: 0; transform: translateY(24px); transition: opacity .6s ease, transform .6s ease; }
 .reveal.in { opacity: 1; transform: none; }
+
+/* ---------- TELAS DEMO ---------- */
+.telas-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 48px; }
+.tela { }
+.tela-label { display: flex; align-items: center; gap: 9px; font-size: 13.5px; color: var(--text-2); margin-bottom: 14px; font-family: 'JetBrains Mono'; }
+.tela-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--amber); }
+.tela-frame {
+  background: linear-gradient(160deg, var(--bg-3), var(--bg));
+  border: 1px solid var(--border); border-radius: var(--radius); padding: 18px;
+  box-shadow: 0 24px 60px -28px rgba(0,0,0,0.55); height: 100%;
+}
+
+/* caixa demo */
+.cx-demo { display: flex; flex-direction: column; gap: 12px; }
+.cx-demo-search { font-size: 13px; color: var(--text-3); background: var(--bg); border: 1px solid var(--border); border-radius: 9px; padding: 11px 14px; }
+.cx-demo-search i { font-style: normal; margin-right: 6px; }
+.cx-demo-cart { display: flex; flex-direction: column; gap: 8px; }
+.cx-demo-item { display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 14px; background: var(--bg-2); border: 1px solid var(--border); border-radius: 9px; padding: 11px 13px; }
+.cx-demo-name { font-size: 13.5px; font-weight: 500; color: var(--text-1); }
+.cx-demo-stock { font-size: 11px; color: var(--text-3); margin-top: 2px; }
+.cx-demo-qty { font-family: 'JetBrains Mono'; font-size: 13px; color: var(--text-2); background: var(--bg-3); width: 26px; height: 26px; display: grid; place-items: center; border-radius: 6px; }
+.cx-demo-price { font-size: 13.5px; font-weight: 600; color: var(--amber-bright); }
+.cx-demo-total { display: flex; align-items: center; justify-content: space-between; padding: 13px; background: var(--bg-2); border: 1px solid var(--amber-border); border-radius: 9px; }
+.cx-demo-total span { font-size: 14px; color: var(--text-2); }
+.cx-demo-total strong { font-family: 'Sora'; font-size: 20px; color: var(--text-1); }
+.cx-demo-pays { display: flex; gap: 8px; }
+.cx-demo-pay { flex: 1; text-align: center; font-size: 12.5px; padding: 9px 4px; border-radius: 8px; border: 1px solid var(--border); color: var(--text-2); }
+.cx-demo-pay.active { border-color: var(--amber-border); background: var(--amber-soft); color: var(--amber-bright); }
+.cx-demo-finish { text-align: center; background: var(--amber); color: #1a1206; font-weight: 600; font-size: 14px; padding: 12px; border-radius: 9px; }
+
+/* produtos demo */
+.pr-demo { display: flex; flex-direction: column; gap: 13px; }
+.pr-demo-field { display: flex; flex-direction: column; gap: 5px; flex: 1; }
+.pr-demo-field label { font-size: 11.5px; color: var(--text-3); font-weight: 500; }
+.pr-demo-input { font-size: 13.5px; color: var(--text-1); background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; }
+.pr-demo-row { display: flex; gap: 12px; }
+.pr-demo-vartitle { font-size: 12px; color: var(--text-2); font-weight: 600; margin-top: 4px; padding-top: 13px; border-top: 1px solid var(--border); }
+.pr-demo-grid { display: flex; flex-direction: column; gap: 6px; }
+.pr-demo-gridhead { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; font-size: 10.5px; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.05em; padding: 0 2px; }
+.pr-demo-gridrow { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+.pr-demo-cell { font-size: 13px; color: var(--text-1); background: var(--bg); border: 1px solid var(--border); border-radius: 7px; padding: 8px 10px; text-align: center; }
+.pr-demo-margin { font-size: 13px; color: var(--text-2); background: rgba(107,191,89,0.08); border: 1px solid rgba(107,191,89,0.18); border-radius: 8px; padding: 10px 13px; }
+.pr-demo-margin strong { color: var(--green); }
+
+@media (max-width: 860px) { .telas-grid { grid-template-columns: 1fr; } }

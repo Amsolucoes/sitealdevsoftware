@@ -4,6 +4,9 @@ const WHATS = '5567982036545'
 const WHATS_MSG = encodeURIComponent('Olá! Vim pelo site e quero saber mais sobre os sistemas da AL Dev Software.')
 const whatsLink = `https://wa.me/${WHATS}?text=${WHATS_MSG}`
 
+const LINK_LOJA = 'https://lojamvp-frontend.vercel.app'
+const LINK_ADMIN = 'https://lojamvp-admin-frontend.vercel.app'
+
 function useReveal() {
   useEffect(() => {
     const els = document.querySelectorAll('.reveal')
@@ -25,8 +28,10 @@ function Nav() {
       <div className="nav-links">
         <a href="#servicos">Serviços</a>
         <a href="#sistema">Sistema</a>
+        <a href="#telas">Telas</a>
         <a href="#precos">Preços</a>
-        <a href="#contato" className="nav-cta">Falar com a gente</a>
+        <a href={LINK_ADMIN} target="_blank" rel="noreferrer" className="nav-login">Área do cliente</a>
+        <a href={LINK_LOJA} target="_blank" rel="noreferrer" className="nav-cta">Acessar loja →</a>
       </div>
       <a href="#contato" className="nav-toggle" aria-label="Contato">☰</a>
     </nav>
@@ -164,6 +169,74 @@ const PLANS = [
   },
 ]
 
+function Telas() {
+  useReveal()
+  return (
+    <section className="section" id="telas">
+      <div className="reveal">
+        <div className="section-eyebrow">por dentro do sistema</div>
+        <h2 className="section-title">Veja como é por dentro.</h2>
+        <p className="section-lead">Telas reais do dia a dia: o caixa onde as vendas acontecem e o cadastro de produtos com grade de variações.</p>
+      </div>
+
+      <div className="telas-grid">
+        {/* Caixa */}
+        <div className="tela reveal">
+          <div className="tela-label"><span className="tela-dot" /> Caixa (PDV)</div>
+          <div className="tela-frame">
+            <div className="cx-demo">
+              <div className="cx-demo-search"><i>🔍</i> Buscar produto por nome ou código...</div>
+              <div className="cx-demo-cart">
+                <div className="cx-demo-item">
+                  <div><div className="cx-demo-name">Vestido floral (M / Azul)</div><div className="cx-demo-stock">estoque: 6 un.</div></div>
+                  <div className="cx-demo-qty">1</div>
+                  <div className="cx-demo-price">R$ 119,90</div>
+                </div>
+                <div className="cx-demo-item">
+                  <div><div className="cx-demo-name">Calça jeans (40)</div><div className="cx-demo-stock">estoque: 12 un.</div></div>
+                  <div className="cx-demo-qty">2</div>
+                  <div className="cx-demo-price">R$ 179,80</div>
+                </div>
+              </div>
+              <div className="cx-demo-total">
+                <span>Total</span><strong>R$ 299,70</strong>
+              </div>
+              <div className="cx-demo-pays">
+                <span className="cx-demo-pay active">⚡ Pix</span>
+                <span className="cx-demo-pay">💳 Crédito</span>
+                <span className="cx-demo-pay">💵 Dinheiro</span>
+              </div>
+              <div className="cx-demo-finish">✓ Finalizar venda · R$ 299,70</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Produtos */}
+        <div className="tela reveal" style={{ transitionDelay: '100ms' }}>
+          <div className="tela-label"><span className="tela-dot" /> Cadastro de produtos</div>
+          <div className="tela-frame">
+            <div className="pr-demo">
+              <div className="pr-demo-field"><label>Nome</label><div className="pr-demo-input">Camiseta Básica</div></div>
+              <div className="pr-demo-row">
+                <div className="pr-demo-field"><label>Categoria</label><div className="pr-demo-input">Camiseta</div></div>
+                <div className="pr-demo-field"><label>Preço de venda</label><div className="pr-demo-input">R$ 59,90</div></div>
+              </div>
+              <div className="pr-demo-vartitle">Variações (Tamanho / Cor)</div>
+              <div className="pr-demo-grid">
+                <div className="pr-demo-gridhead"><span>Tam.</span><span>Cor</span><span>Estoque</span></div>
+                <div className="pr-demo-gridrow"><span className="pr-demo-cell">P</span><span className="pr-demo-cell">Preto</span><span className="pr-demo-cell">8</span></div>
+                <div className="pr-demo-gridrow"><span className="pr-demo-cell">M</span><span className="pr-demo-cell">Preto</span><span className="pr-demo-cell">5</span></div>
+                <div className="pr-demo-gridrow"><span className="pr-demo-cell">G</span><span className="pr-demo-cell">Branco</span><span className="pr-demo-cell">3</span></div>
+              </div>
+              <div className="pr-demo-margin">Margem: <strong>+58%</strong> · Lucro: <strong>R$ 22,00</strong></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
 function Pricing() {
   useReveal()
   return (
@@ -252,6 +325,7 @@ export default function App() {
       <Hero />
       <Offerings />
       <Product />
+      <Telas />
       <Pricing />
       <Contact />
       <Footer />
