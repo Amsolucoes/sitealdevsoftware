@@ -29,6 +29,7 @@ function Nav() {
         <a href="#servicos">Serviços</a>
         <a href="#sistema">Sistema</a>
         <a href="#telas">Telas</a>
+        <a href="#perfis">Perfis</a>
         <a href="#precos">Preços</a>
         <a href={LINK_ADMIN} target="_blank" rel="noreferrer" className="nav-login">Área do cliente</a>
         <a href={LINK_LOJA} target="_blank" rel="noreferrer" className="nav-cta">Acessar loja →</a>
@@ -237,6 +238,66 @@ function Telas() {
   )
 }
 
+function Perfis() {
+  useReveal()
+  const perfis = [
+    {
+      icon: '👕', nome: 'Vestuário',
+      desc: 'Para lojas de roupas em geral.',
+      categorias: 'Camiseta, Calça, Vestido, Blusa, Bermuda, Casaco',
+      tamanho: 'Letra (PP a XG) ou Número (32 a 46), automático por categoria',
+      cor: 'Sim',
+    },
+    {
+      icon: '💍', nome: 'Bijuterias e Acessórios',
+      desc: 'Para semi joias, bijuterias e acessórios.',
+      categorias: 'Semi Joias, Colares, Brincos, Anéis, Pulseiras',
+      tamanho: 'Sem tamanho (controle por cor/modelo)',
+      cor: 'Sim',
+    },
+    {
+      icon: '👟', nome: 'Sapataria',
+      desc: 'Para calçados e sapatarias.',
+      categorias: 'Tênis, Sapato, Sandália, Bota, Chinelo',
+      tamanho: 'Número (33 a 44)',
+      cor: 'Sim',
+    },
+  ]
+  return (
+    <section className="section" id="perfis">
+      <div className="reveal">
+        <div className="section-eyebrow">perfis prontos</div>
+        <h2 className="section-title">Já vem configurado pro seu ramo.</h2>
+        <p className="section-lead">Escolha o perfil da sua loja e o sistema já vem com as categorias e os campos certos. Sem configurar nada do zero.</p>
+      </div>
+      <div className="perfis-grid">
+        {perfis.map((p, i) => (
+          <div className="perfil-card reveal" key={i} style={{ transitionDelay: `${i * 80}ms` }}>
+            <span className="perfil-icon">{p.icon}</span>
+            <h3>{p.nome}</h3>
+            <p className="perfil-desc">{p.desc}</p>
+            <div className="perfil-rows">
+              <div className="perfil-row">
+                <span className="perfil-key">Categorias</span>
+                <span className="perfil-val">{p.categorias}</span>
+              </div>
+              <div className="perfil-row">
+                <span className="perfil-key">Tamanho</span>
+                <span className="perfil-val">{p.tamanho}</span>
+              </div>
+              <div className="perfil-row">
+                <span className="perfil-key">Cor / variação</span>
+                <span className="perfil-val">{p.cor}</span>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+      <p className="perfis-note">Precisa de um ramo diferente? A gente cria um perfil sob medida para a sua loja.</p>
+    </section>
+  )
+}
+
 function Pricing() {
   useReveal()
   return (
@@ -326,6 +387,7 @@ export default function App() {
       <Offerings />
       <Product />
       <Telas />
+      <Perfis />
       <Pricing />
       <Contact />
       <Footer />
