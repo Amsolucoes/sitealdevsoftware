@@ -411,3 +411,21 @@ a { color: inherit; text-decoration: none; }
 .perfil-val { font-size: 13.5px; color: var(--text-2); line-height: 1.5; }
 .perfis-note { text-align: center; font-size: 14.5px; color: var(--text-3); margin-top: 32px; }
 @media (max-width: 800px) { .perfis-grid { grid-template-columns: 1fr; } }
+
+/* ---------- TABELA COMPARATIVA ---------- */
+.compare { margin-top: 56px; }
+.compare-title { font-family: 'Sora'; font-size: 20px; font-weight: 700; text-align: center; margin-bottom: 24px; letter-spacing: -0.01em; }
+.compare-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius); }
+.compare-table { width: 100%; border-collapse: collapse; min-width: 560px; }
+.compare-table th, .compare-table td { padding: 14px 18px; text-align: left; font-size: 14px; border-bottom: 1px solid var(--border); }
+.compare-table thead th { background: var(--bg-2); font-family: 'Sora'; font-weight: 650; color: var(--text-1); font-size: 14px; }
+.compare-table thead th:not(:first-child), .compare-cell { text-align: center; }
+.compare-table tbody td:first-child { color: var(--text-2); }
+.compare-table tbody tr:last-child td { border-bottom: none; }
+.compare-yes { color: var(--amber-bright); font-weight: 700; font-size: 16px; }
+.compare-no { color: var(--text-3); }
+.compare-opt { font-size: 11.5px; color: var(--text-3); font-family: 'JetBrains Mono'; background: var(--bg-3); padding: 2px 8px; border-radius: 5px; }
+.compare-note { text-align: center; font-size: 13px; color: var(--text-3); margin-top: 16px; }
+
+/* badge em breve no card */
+.price-card .price-tag { display: inline-block; }

@@ -6,6 +6,7 @@ const whatsLink = `https://wa.me/${WHATS}?text=${WHATS_MSG}`
 
 const LINK_LOJA = 'https://app.aldevsoftware.com.br'
 const LINK_ADMIN = 'https://admin.aldevsoftware.com.br'
+const LINK_CADASTRO = 'https://app.aldevsoftware.com.br/cadastro'
 
 function useReveal() {
   useEffect(() => {
@@ -195,17 +196,18 @@ function Product() {
 
 const PLANS = [
   {
-    tag: 'sistema de lojas', name: 'Loja', desc: 'Para quem quer começar a vender organizado hoje.',
-    value: 'A partir de', big: 'R$ 89,90', note: 'por mês · 7 dias grátis para testar',
-    feats: ['PDV, estoque e clientes', 'Trocas e crédito de cliente', 'Relatórios e fluxo de caixa', 'Suporte por WhatsApp'],
+    tag: 'plano base', name: 'Loja', desc: 'Tudo para vender e gerir sua loja no dia a dia.',
+    value: 'A partir de', big: 'R$ 89,90', note: 'no 1º trimestre, depois R$ 119,90/mês · 7 dias grátis',
+    feats: ['PDV, estoque e clientes', 'Trocas e crédito de cliente', 'Relatórios e fluxo de caixa', 'Suporte seg a sex via WhatsApp'],
+    cta: 'cadastro',
   },
   {
-    tag: 'mais escolhido', name: 'Loja + Implantação', desc: 'Sistema configurado e pronto, com seus produtos cadastrados.', featured: true,
-    value: 'Implantação a partir de', big: 'R$ 250', note: '+ mensalidade · cadastro e treinamento inclusos',
-    feats: ['Tudo do plano Loja', 'Cadastro inicial de produtos', 'Treinamento da equipe', 'Personalização de marca e cores'],
+    tag: 'em breve', name: 'Loja + Módulos', desc: 'Acople módulos extras conforme sua loja cresce.', featured: true, emBreve: true,
+    value: 'Base + ', big: 'R$ 30', note: 'por módulo adicional · lançamento em breve',
+    feats: ['Tudo do plano Loja', 'Importação de NF via XML', 'Emissão de etiquetas', 'Impressão de NF fiscal'],
   },
   {
-    tag: 'sob medida', name: 'Projeto', desc: 'Software personalizado para a sua necessidade específica.',
+    tag: 'sob medida', name: 'Projeto', desc: 'Software personalizado para a sua necessidade específica.', contato: true,
     value: 'Orçamento', big: 'sob medida', note: 'conforme o escopo do projeto',
     feats: ['Levantamento de requisitos', 'Desenvolvimento dedicado', 'Integrações e automações', 'Acompanhamento contínuo'],
   },
@@ -431,9 +433,56 @@ function Pricing() {
             <ul>
               {p.feats.map((f, j) => <li key={j}><span className="c">✓</span>{f}</li>)}
             </ul>
-            <a href="#contato" className={p.featured ? 'btn-primary' : 'btn-ghost'} style={{ justifyContent: 'center' }}>Quero esse</a>
+            {p.emBreve ? (
+              <button className="btn-ghost" disabled style={{ justifyContent: 'center', opacity: 0.55, cursor: 'not-allowed' }}>Em breve</button>
+            ) : p.contato ? (
+              <a href="#contato" className={p.featured ? 'btn-primary' : 'btn-ghost'} style={{ justifyContent: 'center' }}>Pedir orçamento</a>
+            ) : (
+              <a href={LINK_CADASTRO} target="_blank" rel="noreferrer" className={p.featured ? 'btn-primary' : 'btn-ghost'} style={{ justifyContent: 'center' }}>Começar grátis</a>
+            )}
           </div>
         ))}
+      </div>
+
+      <div className="compare">
+        <div className="compare-title">Compare os planos</div>
+        <div className="compare-wrap">
+          <table className="compare-table">
+            <thead>
+              <tr>
+                <th>Recurso</th>
+                <th>Loja</th>
+                <th>Loja + Módulos</th>
+                <th>Projeto</th>
+              </tr>
+            </thead>
+            <tbody>
+              {[
+                ['PDV, estoque e clientes', true, true, '—'],
+                ['Trocas e crédito de cliente', true, true, '—'],
+                ['Relatórios e fluxo de caixa', true, true, '—'],
+                ['Cobrança automática via Pix', true, true, '—'],
+                ['Suporte seg a sex via WhatsApp', true, true, true],
+                ['Importação de NF via XML', false, true, 'opcional'],
+                ['Emissão de etiquetas', false, true, 'opcional'],
+                ['Impressão de NF fiscal', false, true, 'opcional'],
+                ['Desenvolvimento sob medida', false, false, true],
+              ].map((row, i) => (
+                <tr key={i}>
+                  <td>{row[0]}</td>
+                  {row.slice(1).map((cell, j) => (
+                    <td key={j} className="compare-cell">
+                      {cell === true ? <span className="compare-yes">✓</span>
+                        : cell === false ? <span className="compare-no">—</span>
+                        : <span className="compare-opt">{cell}</span>}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p className="compare-note">Os módulos extras (NF, etiquetas, impressão fiscal) chegam em breve e custam R$ 30/mês cada, somados ao plano base.</p>
       </div>
     </section>
   )
