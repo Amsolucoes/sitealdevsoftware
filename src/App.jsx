@@ -4,8 +4,8 @@ const WHATS = '5567982036545'
 const WHATS_MSG = encodeURIComponent('Olá! Vim pelo site e quero saber mais sobre os sistemas da AL Dev Software.')
 const whatsLink = `https://wa.me/${WHATS}?text=${WHATS_MSG}`
 
-const LINK_LOJA = 'https://lojamvp-frontend.vercel.app'
-const LINK_ADMIN = 'https://lojamvp-admin-frontend.vercel.app'
+const LINK_LOJA = 'https://app.aldevsoftware.com.br'
+const LINK_ADMIN = 'https://admin.aldevsoftware.com.br'
 
 function useReveal() {
   useEffect(() => {
