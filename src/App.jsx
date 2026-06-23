@@ -227,36 +227,47 @@ function Telas() {
           <div className="tela-label"><span className="tela-dot" /> Caixa (PDV)</div>
           <div className="tela-frame">
             <div className="tela-inner">
-              <div className="cx-demo">
-                <div className="cx-demo-head">Caixa</div>
-                <div className="cx-demo-search"><i>🔍</i> Buscar produto...</div>
-                <div className="cx-demo-cart">
-                  <div className="cx-demo-item">
-                    <div><div className="cx-demo-name">Vestido floral (M / Azul)</div><div className="cx-demo-stock">estoque: 6 un.</div></div>
-                    <div className="cx-demo-qty">1</div>
-                    <div className="cx-demo-price">R$ 119,90</div>
+              <div className="tela-scroll">
+                <div className="cx-demo">
+                  <div className="cx-demo-headrow">
+                    <span className="cx-demo-head">Caixa</span>
+                    <span className="cx-demo-troca">🔄 Troca</span>
                   </div>
-                  <div className="cx-demo-item">
-                    <div><div className="cx-demo-name">Calça jeans (40)</div><div className="cx-demo-stock">estoque: 12 un.</div></div>
-                    <div className="cx-demo-qty">2</div>
-                    <div className="cx-demo-price">R$ 179,80</div>
+                  <div className="cx-demo-search"><i>🔍</i> Buscar produto...</div>
+                  <div className="cx-demo-cart">
+                    <div className="cx-demo-item">
+                      <div><div className="cx-demo-name">Vestido floral (M / Azul)</div><div className="cx-demo-stock">estoque: 6 un.</div></div>
+                      <div className="cx-demo-qty">1</div>
+                      <div className="cx-demo-price">R$ 119,90</div>
+                    </div>
+                    <div className="cx-demo-item">
+                      <div><div className="cx-demo-name">Calça jeans (40)</div><div className="cx-demo-stock">estoque: 12 un.</div></div>
+                      <div className="cx-demo-qty">2</div>
+                      <div className="cx-demo-price">R$ 179,80</div>
+                    </div>
                   </div>
-                  <div className="cx-demo-item">
-                    <div><div className="cx-demo-name">Tênis casual (38)</div><div className="cx-demo-stock">estoque: 4 un.</div></div>
-                    <div className="cx-demo-qty">1</div>
-                    <div className="cx-demo-price">R$ 159,90</div>
+                  <div className="cx-demo-block">
+                    <div className="cx-demo-blocklabel">👤 Cliente</div>
+                    <div className="cx-demo-clientbox">Buscar cliente...</div>
                   </div>
+                  <div className="cx-demo-disc">Desconto: − R$ 10,00</div>
+                  <div className="cx-demo-total">
+                    <span>Total</span><strong>R$ 289,70</strong>
+                  </div>
+                  <div className="cx-demo-block">
+                    <div className="cx-demo-blockhead">
+                      <span className="cx-demo-blocklabel">Forma de pagamento</span>
+                      <span className="cx-demo-twoways">+ 2 formas</span>
+                    </div>
+                    <div className="cx-demo-pays">
+                      <span className="cx-demo-pay">💵<i>Dinheiro</i></span>
+                      <span className="cx-demo-pay active">⚡<i>Pix</i></span>
+                      <span className="cx-demo-pay">💳<i>Crédito</i></span>
+                      <span className="cx-demo-pay">🏦<i>Débito</i></span>
+                    </div>
+                  </div>
+                  <div className="cx-demo-finish">✓ Finalizar venda · R$ 289,70</div>
                 </div>
-                <div className="cx-demo-disc">Desconto: − R$ 10,00</div>
-                <div className="cx-demo-total">
-                  <span>Total</span><strong>R$ 449,60</strong>
-                </div>
-                <div className="cx-demo-pays">
-                  <span className="cx-demo-pay active">⚡ Pix</span>
-                  <span className="cx-demo-pay">💳 Crédito</span>
-                  <span className="cx-demo-pay">💵 Dinheiro</span>
-                </div>
-                <div className="cx-demo-finish">✓ Finalizar venda</div>
               </div>
             </div>
           </div>
@@ -267,23 +278,30 @@ function Telas() {
           <div className="tela-label"><span className="tela-dot" /> Cadastro de produtos</div>
           <div className="tela-frame">
             <div className="tela-inner">
-              <div className="pr-demo">
-                <div className="cx-demo-head">Novo produto</div>
-                <div className="pr-demo-field"><label>Nome</label><div className="pr-demo-input">Camiseta Básica</div></div>
-                <div className="pr-demo-row">
-                  <div className="pr-demo-field"><label>Categoria</label><div className="pr-demo-input">Camiseta</div></div>
-                  <div className="pr-demo-field"><label>Preço</label><div className="pr-demo-input">R$ 59,90</div></div>
+              <div className="tela-scroll">
+                <div className="pr-demo">
+                  <div className="cx-demo-head">Novo produto</div>
+                  <div className="pr-demo-field"><label>Nome</label><div className="pr-demo-input">Camiseta Básica</div></div>
+                  <div className="pr-demo-row">
+                    <div className="pr-demo-field"><label>Categoria</label><div className="pr-demo-input">Camiseta</div></div>
+                    <div className="pr-demo-field"><label>Cód. barras</label><div className="pr-demo-input">789100…</div></div>
+                  </div>
+                  <div className="pr-demo-row">
+                    <div className="pr-demo-field"><label>Preço custo</label><div className="pr-demo-input">R$ 38,00</div></div>
+                    <div className="pr-demo-field"><label>Preço venda</label><div className="pr-demo-input">R$ 59,90</div></div>
+                  </div>
+                  <div className="pr-demo-field"><label>Status</label><div className="pr-demo-input">Ativo</div></div>
+                  <div className="pr-demo-vartitle">Variações (Tamanho / Cor)</div>
+                  <div className="pr-demo-grid">
+                    <div className="pr-demo-gridhead"><span>Tam.</span><span>Cor</span><span>Est.</span><span>Mín.</span></div>
+                    <div className="pr-demo-gridrow"><span className="pr-demo-cell">P</span><span className="pr-demo-cell">Preto</span><span className="pr-demo-cell">8</span><span className="pr-demo-cell">2</span></div>
+                    <div className="pr-demo-gridrow"><span className="pr-demo-cell">M</span><span className="pr-demo-cell">Preto</span><span className="pr-demo-cell">5</span><span className="pr-demo-cell">2</span></div>
+                    <div className="pr-demo-gridrow"><span className="pr-demo-cell">G</span><span className="pr-demo-cell">Branco</span><span className="pr-demo-cell">3</span><span className="pr-demo-cell">2</span></div>
+                    <div className="pr-demo-gridrow"><span className="pr-demo-cell">GG</span><span className="pr-demo-cell">Azul</span><span className="pr-demo-cell">6</span><span className="pr-demo-cell">2</span></div>
+                  </div>
+                  <div className="pr-demo-margin">Margem: <strong>+58%</strong> · Lucro: <strong>R$ 21,90</strong></div>
+                  <div className="cx-demo-finish">Salvar produto</div>
                 </div>
-                <div className="pr-demo-vartitle">Variações (Tamanho / Cor)</div>
-                <div className="pr-demo-grid">
-                  <div className="pr-demo-gridhead"><span>Tam.</span><span>Cor</span><span>Estoque</span></div>
-                  <div className="pr-demo-gridrow"><span className="pr-demo-cell">P</span><span className="pr-demo-cell">Preto</span><span className="pr-demo-cell">8</span></div>
-                  <div className="pr-demo-gridrow"><span className="pr-demo-cell">M</span><span className="pr-demo-cell">Preto</span><span className="pr-demo-cell">5</span></div>
-                  <div className="pr-demo-gridrow"><span className="pr-demo-cell">G</span><span className="pr-demo-cell">Branco</span><span className="pr-demo-cell">3</span></div>
-                  <div className="pr-demo-gridrow"><span className="pr-demo-cell">GG</span><span className="pr-demo-cell">Azul</span><span className="pr-demo-cell">6</span></div>
-                </div>
-                <div className="pr-demo-margin">Margem: <strong>+58%</strong> · Lucro: <strong>R$ 22</strong></div>
-                <div className="cx-demo-finish">Salvar produto</div>
               </div>
             </div>
           </div>
@@ -294,30 +312,34 @@ function Telas() {
           <div className="tela-label"><span className="tela-dot" /> Controle de estoque</div>
           <div className="tela-frame">
             <div className="tela-inner">
-              <div className="es-demo">
-                <div className="cx-demo-head">Estoque</div>
-                <div className="es-demo-tabs">
-                  <span className="es-demo-tab active">Visão geral</span>
-                  <span className="es-demo-tab">Movimentos</span>
-                </div>
-                <div className="es-demo-alert">⚠️ 2 produtos com estoque baixo</div>
-                <div className="es-demo-list">
-                  <div className="es-demo-row">
-                    <div className="es-demo-name">Vestido floral</div>
-                    <div className="es-demo-vars"><span>M/Azul · 6</span><span className="low">P/Rosa · 1</span></div>
+              <div className="tela-scroll">
+                <div className="es-demo">
+                  <div className="cx-demo-head">Estoque</div>
+                  <div className="es-demo-tabs">
+                    <span className="es-demo-tab active">Visão geral</span>
+                    <span className="es-demo-tab">Movimentos</span>
                   </div>
-                  <div className="es-demo-row">
-                    <div className="es-demo-name">Calça jeans</div>
-                    <div className="es-demo-vars"><span>40 · 12</span><span>42 · 7</span></div>
+                  <div className="es-demo-alert">⚠️ 2 produtos com estoque baixo</div>
+                  <div className="es-demo-list">
+                    <div className="es-demo-row">
+                      <div className="es-demo-name">Vestido floral</div>
+                      <div className="es-demo-vars"><span>M/Azul · 6</span><span className="low">P/Rosa · 1</span></div>
+                    </div>
+                    <div className="es-demo-row">
+                      <div className="es-demo-name">Calça jeans</div>
+                      <div className="es-demo-vars"><span>40 · 12</span><span>42 · 7</span></div>
+                    </div>
+                    <div className="es-demo-row">
+                      <div className="es-demo-name">Tênis casual</div>
+                      <div className="es-demo-vars"><span className="low">38 · 4</span><span>39 · 9</span></div>
+                    </div>
                   </div>
-                  <div className="es-demo-row">
-                    <div className="es-demo-name">Tênis casual</div>
-                    <div className="es-demo-vars"><span className="low">38 · 4</span><span>39 · 9</span></div>
+                  <div className="es-demo-movtitle">Últimos movimentos</div>
+                  <div className="es-demo-mov">
+                    <div className="es-demo-movrow"><span className="in">↓ Entrada</span><span>Calça jeans +10</span></div>
+                    <div className="es-demo-movrow"><span className="out">↑ Saída</span><span>Vestido floral −1</span></div>
+                    <div className="es-demo-movrow"><span className="in">↓ Entrada</span><span>Tênis casual +5</span></div>
                   </div>
-                </div>
-                <div className="es-demo-mov">
-                  <div className="es-demo-movrow"><span className="in">↓ Entrada</span><span>Calça jeans +10</span></div>
-                  <div className="es-demo-movrow"><span className="out">↑ Saída</span><span>Vestido floral −1</span></div>
                 </div>
               </div>
             </div>
