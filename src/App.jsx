@@ -19,9 +19,11 @@ function useReveal() {
 }
 
 function Nav() {
+  const [aberto, setAberto] = useState(false)
+  const fechar = () => setAberto(false)
   return (
     <nav className="nav">
-      <a href="#top" className="nav-logo">
+      <a href="#top" className="nav-logo" onClick={fechar}>
         <span className="nav-logo-mark">{'</>'}</span>
         AL Dev Software
       </a>
@@ -34,7 +36,22 @@ function Nav() {
         <a href={LINK_ADMIN} target="_blank" rel="noreferrer" className="nav-login">Área do cliente</a>
         <a href={LINK_LOJA} target="_blank" rel="noreferrer" className="nav-cta">Acessar loja →</a>
       </div>
-      <a href="#contato" className="nav-toggle" aria-label="Contato">☰</a>
+      <button className="nav-toggle" aria-label="Menu" onClick={() => setAberto(v => !v)}>
+        {aberto ? '✕' : '☰'}
+      </button>
+
+      {aberto && <div className="nav-mobile-overlay" onClick={fechar} />}
+      <div className={`nav-mobile${aberto ? ' open' : ''}`}>
+        <a href="#servicos" onClick={fechar}>Serviços</a>
+        <a href="#sistema" onClick={fechar}>Sistema</a>
+        <a href="#telas" onClick={fechar}>Telas</a>
+        <a href="#perfis" onClick={fechar}>Perfis</a>
+        <a href="#precos" onClick={fechar}>Preços</a>
+        <a href="#contato" onClick={fechar}>Contato</a>
+        <div className="nav-mobile-divider" />
+        <a href={LINK_ADMIN} target="_blank" rel="noreferrer" className="nav-mobile-login" onClick={fechar}>Área do cliente</a>
+        <a href={LINK_LOJA} target="_blank" rel="noreferrer" className="nav-mobile-cta" onClick={fechar}>Acessar loja →</a>
+      </div>
     </nav>
   )
 }

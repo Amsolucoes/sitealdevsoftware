@@ -72,12 +72,42 @@ a { color: inherit; text-decoration: none; }
   transition: border-color .15s, background .15s;
 }
 .nav-login:hover { border-color: var(--amber-border); background: var(--amber-soft); }
-.nav-toggle { display: none; background: none; border: none; color: var(--text-1); cursor: pointer; font-size: 22px; }
+.nav-toggle { display: none; background: none; border: none; color: var(--text-1); cursor: pointer; font-size: 22px; z-index: 110; }
+
+/* menu mobile */
+.nav-mobile { display: none; }
+.nav-mobile-overlay { display: none; }
 
 @media (max-width: 800px) {
   .nav-links { display: none; }
   .nav-toggle { display: block; }
   .nav { padding: 16px 20px; }
+
+  .nav-mobile-overlay {
+    display: block; position: fixed; inset: 0; top: 60px;
+    background: rgba(0,0,0,0.5); z-index: 90;
+  }
+  .nav-mobile {
+    display: flex; flex-direction: column;
+    position: fixed; top: 60px; left: 0; right: 0; z-index: 95;
+    background: var(--bg-2); border-bottom: 1px solid var(--border);
+    padding: 12px 20px 22px;
+    transform: translateY(-12px); opacity: 0; pointer-events: none;
+    transition: transform .2s ease, opacity .2s ease;
+    box-shadow: 0 24px 40px -20px rgba(0,0,0,0.6);
+  }
+  .nav-mobile.open { transform: translateY(0); opacity: 1; pointer-events: auto; }
+  .nav-mobile a { padding: 13px 6px; font-size: 15px; color: var(--text-2); border-bottom: 1px solid var(--border); }
+  .nav-mobile a:last-child { border-bottom: none; }
+  .nav-mobile-divider { height: 8px; }
+  .nav-mobile-login {
+    margin-top: 8px; text-align: center; color: var(--text-1) !important;
+    border: 1px solid var(--border) !important; border-radius: 9px; font-weight: 500;
+  }
+  .nav-mobile-cta {
+    margin-top: 10px; text-align: center; background: var(--amber); color: #1a1206 !important;
+    border-radius: 9px; font-weight: 600; border-bottom: none !important;
+  }
 }
 
 /* ---------- HERO ---------- */
