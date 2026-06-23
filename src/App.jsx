@@ -72,26 +72,50 @@ function Hero() {
           <a href="#sistema" className="btn-ghost">Ver o sistema</a>
         </div>
       </div>
-      <div className="terminal">
-        <div className="terminal-bar">
-          <span className="terminal-dot" style={{ background: '#ff5f57' }} />
-          <span className="terminal-dot" style={{ background: '#febc2e' }} />
-          <span className="terminal-dot" style={{ background: '#28c840' }} />
-          <span className="terminal-title">aldevsoftware ~ build</span>
+
+      <div className="hero-devices">
+        {/* Notebook */}
+        <div className="laptop">
+          <div className="laptop-screen">
+            <DashboardDemo />
+          </div>
+          <div className="laptop-base"><div className="laptop-notch" /></div>
         </div>
-        <div className="terminal-body">
-          <span className="t-line t-comment">// o que entregamos</span>
-          <span className="t-line"><span className="t-key">const</span> solucao = {'{'}</span>
-          <span className="t-line">{'  '}software: <span className="t-str">'sob medida'</span>,</span>
-          <span className="t-line">{'  '}gestaoLojas: <span className="t-str">'completa'</span>,</span>
-          <span className="t-line">{'  '}suporte: <span className="t-str">'humano'</span>,</span>
-          <span className="t-line">{'  '}entrega: <span className="t-str">'rápida'</span></span>
-          <span className="t-line">{'}'}</span>
-          <span className="t-line">&nbsp;</span>
-          <span className="t-line t-comment">// pronto para crescer com você<span className="t-cursor" /></span>
+        {/* iPhone */}
+        <div className="phone">
+          <div className="phone-notch" />
+          <div className="phone-screen">
+            <DashboardDemo mobile />
+          </div>
         </div>
       </div>
     </header>
+  )
+}
+
+function DashboardDemo({ mobile }) {
+  return (
+    <div className={`dash${mobile ? ' dash-mobile' : ''}`}>
+      <div className="dash-top">
+        <div className="dash-brand"><span className="dash-logo" />Minha Loja</div>
+        {!mobile && <span className="dash-date">Hoje · 23 jun</span>}
+      </div>
+      <div className="dash-cards">
+        <div className="dash-card"><div className="dash-v">R$ 1.840</div><div className="dash-l">Vendas hoje</div></div>
+        <div className="dash-card"><div className="dash-v green">12</div><div className="dash-l">Vendas</div></div>
+        {!mobile && <div className="dash-card"><div className="dash-v">23</div><div className="dash-l">Produtos</div></div>}
+      </div>
+      <div className="dash-chart">
+        {[40, 65, 50, 80, 60, 95, 72].map((h, i) => (
+          <div className="dash-bar" key={i} style={{ height: `${h}%` }} />
+        ))}
+      </div>
+      <div className="dash-list">
+        <div className="dash-row"><span>Vestido floral (M)</span><span className="dash-tag">pix</span></div>
+        <div className="dash-row"><span>Calça jeans (40)</span><span className="dash-tag">crédito</span></div>
+        {!mobile && <div className="dash-row"><span>Camiseta (G / Preto)</span><span className="dash-tag">dinheiro</span></div>}
+      </div>
+    </div>
   )
 }
 
@@ -202,8 +226,9 @@ function Telas() {
         <div className="tela reveal">
           <div className="tela-label"><span className="tela-dot" /> Caixa (PDV)</div>
           <div className="tela-frame">
+            <div className="tela-inner">
             <div className="cx-demo">
-              <div className="cx-demo-search"><i>🔍</i> Buscar produto por nome ou código...</div>
+              <div className="cx-demo-search"><i>🔍</i> Buscar produto...</div>
               <div className="cx-demo-cart">
                 <div className="cx-demo-item">
                   <div><div className="cx-demo-name">Vestido floral (M / Azul)</div><div className="cx-demo-stock">estoque: 6 un.</div></div>
@@ -224,7 +249,8 @@ function Telas() {
                 <span className="cx-demo-pay">💳 Crédito</span>
                 <span className="cx-demo-pay">💵 Dinheiro</span>
               </div>
-              <div className="cx-demo-finish">✓ Finalizar venda · R$ 299,70</div>
+              <div className="cx-demo-finish">✓ Finalizar venda</div>
+            </div>
             </div>
           </div>
         </div>
@@ -233,11 +259,12 @@ function Telas() {
         <div className="tela reveal" style={{ transitionDelay: '100ms' }}>
           <div className="tela-label"><span className="tela-dot" /> Cadastro de produtos</div>
           <div className="tela-frame">
+            <div className="tela-inner">
             <div className="pr-demo">
               <div className="pr-demo-field"><label>Nome</label><div className="pr-demo-input">Camiseta Básica</div></div>
               <div className="pr-demo-row">
                 <div className="pr-demo-field"><label>Categoria</label><div className="pr-demo-input">Camiseta</div></div>
-                <div className="pr-demo-field"><label>Preço de venda</label><div className="pr-demo-input">R$ 59,90</div></div>
+                <div className="pr-demo-field"><label>Preço</label><div className="pr-demo-input">R$ 59,90</div></div>
               </div>
               <div className="pr-demo-vartitle">Variações (Tamanho / Cor)</div>
               <div className="pr-demo-grid">
@@ -246,7 +273,8 @@ function Telas() {
                 <div className="pr-demo-gridrow"><span className="pr-demo-cell">M</span><span className="pr-demo-cell">Preto</span><span className="pr-demo-cell">5</span></div>
                 <div className="pr-demo-gridrow"><span className="pr-demo-cell">G</span><span className="pr-demo-cell">Branco</span><span className="pr-demo-cell">3</span></div>
               </div>
-              <div className="pr-demo-margin">Margem: <strong>+58%</strong> · Lucro: <strong>R$ 22,00</strong></div>
+              <div className="pr-demo-margin">Margem: <strong>+58%</strong> · Lucro: <strong>R$ 22</strong></div>
+            </div>
             </div>
           </div>
         </div>
