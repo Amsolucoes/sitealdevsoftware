@@ -25,7 +25,7 @@ function Nav() {
   return (
     <nav className="nav">
       <a href="#top" className="nav-logo" onClick={fechar}>
-        <span className="nav-logo-mark">{'</>'}</span>
+        <img src="/logo-aldevsoftware-padrao.png" alt="AL Dev Software" className="nav-logo-mark" />
         AL Dev Software
       </a>
       <div className="nav-links">
@@ -526,7 +526,7 @@ function Footer() {
   return (
     <footer className="footer">
       <div>
-        <div className="footer-logo"><span className="nav-logo-mark">{'</>'}</span>AL Dev Software</div>
+        <div className="footer-logo"><img src="/logo-aldevsoftware-padrao.png" alt="AL Dev Software" className="nav-logo-mark" />AL Dev Software</div>
         <p style={{ marginTop: 8 }}>Desenvolvimento de software e gestão para lojas.</p>
       </div>
       <div className="footer-links">
