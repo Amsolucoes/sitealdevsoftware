@@ -34,6 +34,7 @@ function Nav() {
         <a href="#telas">Telas</a>
         <a href="#perfis">Perfis</a>
         <a href="#precos">Preços</a>
+        <a href="#duvidas">Dúvidas</a>
         <a href={LINK_ADMIN} target="_blank" rel="noreferrer" className="nav-login">Área do cliente</a>
         <a href={LINK_LOJA} target="_blank" rel="noreferrer" className="nav-cta">Acessar loja →</a>
       </div>
@@ -48,6 +49,7 @@ function Nav() {
         <a href="#telas" onClick={fechar}>Telas</a>
         <a href="#perfis" onClick={fechar}>Perfis</a>
         <a href="#precos" onClick={fechar}>Preços</a>
+        <a href="#duvidas" onClick={fechar}>Dúvidas</a>
         <a href="#contato" onClick={fechar}>Contato</a>
         <div className="nav-mobile-divider" />
         <a href={LINK_ADMIN} target="_blank" rel="noreferrer" className="nav-mobile-login" onClick={fechar}>Área do cliente</a>
@@ -488,6 +490,61 @@ function Pricing() {
   )
 }
 
+const PERGUNTAS = [
+  {
+    q: 'Como cadastro um produto com grade (tamanho e cor)?',
+    a: 'Ao criar o produto, escolha a categoria certa (ex: Camiseta, Calça) — o sistema já sabe se ela usa tamanho por letra, número ou nenhum. Depois é só adicionar as variações de cor e tamanho, cada uma com seu próprio estoque. Assim você controla "Camiseta P Preta" e "Camiseta M Azul" separadamente, sem duplicar o produto.',
+  },
+  {
+    q: 'Como funcionam os módulos adicionais?',
+    a: 'Cada módulo (Financeiro, Turmas, Corretora, Importação de NF, etc.) pode ser ativado ou desativado por você mesmo, direto na tela de Configurações do sistema. O valor do módulo é somado à sua mensalidade só enquanto ele estiver ativo — sem contrato, sem multa.',
+  },
+  {
+    q: 'Como funciona o módulo Financeiro?',
+    a: 'Ele controla contas a pagar e a receber, contas bancárias, cartão de crédito completo (fatura, parcelamento, juros), transferências entre contas e um dashboard com previsão do mês. Dá pra usar junto com a loja ou sozinho, sem precisar vender produtos.',
+  },
+  {
+    q: 'Como faço para cancelar minha assinatura?',
+    a: 'É só chamar a gente pelo WhatsApp ou e-mail pedindo o cancelamento — não tem multa nem fidelidade. Você pode exportar um backup dos seus dados antes de encerrar, se quiser guardar o histórico.',
+  },
+  {
+    q: 'Como consigo suporte?',
+    a: 'Direto pelo WhatsApp, de segunda a sexta. A gente também pode entrar no seu sistema como suporte (com sua autorização) pra ajudar a resolver algo específico, se precisar.',
+  },
+  {
+    q: 'Tem período de teste grátis?',
+    a: 'Sim, 7 dias grátis pra testar o sistema completo, sem precisar cadastrar cartão de crédito. Se decidir continuar, é só escolher a forma de pagamento depois do trial.',
+  },
+];
+
+function Faq() {
+  useReveal();
+  const [aberto, setAberto] = useState(null);
+
+  return (
+    <section className="section" id="duvidas">
+      <div className="reveal">
+        <div className="section-eyebrow">dúvidas frequentes</div>
+        <h2 className="section-title">Perguntas que a gente mais recebe.</h2>
+        <p className="section-lead">Não achou a sua? Chama a gente no WhatsApp, respondemos rapidinho.</p>
+      </div>
+      <div className="faq-list">
+        {PERGUNTAS.map((item, i) => (
+          <div key={i} className={`faq-item reveal${aberto === i ? ' open' : ''}`} style={{ transitionDelay: `${i * 40}ms` }}>
+            <button className="faq-question" onClick={() => setAberto(aberto === i ? null : i)}>
+              {item.q}
+              <span className="faq-icon">+</span>
+            </button>
+            <div className="faq-answer">
+              <p>{item.a}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  )
+}
+
 function Contact() {
   useReveal()
   const [sent, setSent] = useState(false)
@@ -550,6 +607,7 @@ export default function App() {
       <Telas />
       <Perfis />
       <Pricing />
+      <Faq />
       <Contact />
       <Footer />
     </>
