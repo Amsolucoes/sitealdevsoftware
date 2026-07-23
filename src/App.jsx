@@ -204,9 +204,10 @@ const PLANS = [
     cta: 'cadastro',
   },
   {
-    tag: 'em breve', name: 'Loja + Módulos', desc: 'Acople módulos extras conforme sua loja cresce.', featured: true, emBreve: true,
-    value: 'Base + ', big: 'R$ 30', note: 'por módulo adicional · lançamento em breve',
-    feats: ['Tudo do plano Loja', 'Importação de NF via XML', 'Emissão de etiquetas', 'Impressão de NF fiscal'],
+    tag: 'módulos disponíveis', name: 'Loja + Módulos', desc: 'Acople módulos extras conforme sua loja cresce.', featured: true,
+    value: 'Base + ', big: 'R$ 29,90', note: 'por módulo · ative e desative quando quiser, sem contrato',
+    feats: ['Tudo do plano Loja', 'Financeiro completo (+R$29,90)', 'Importação de NF via XML (+R$29,90)', 'Turmas / aulas em grupo (+R$39,90)'],
+    cta: 'cadastro',
   },
   {
     tag: 'sob medida', name: 'Projeto', desc: 'Software personalizado para a sua necessidade específica.', contato: true,
@@ -465,9 +466,9 @@ function Pricing() {
                 ['Relatórios e fluxo de caixa', true, true, '—'],
                 ['Cobrança automática via Pix', true, true, '—'],
                 ['Suporte seg a sex via WhatsApp', true, true, true],
+                ['Financeiro completo (contas, cartão)', false, true, 'opcional'],
                 ['Importação de NF via XML', false, true, 'opcional'],
-                ['Emissão de etiquetas', false, true, 'opcional'],
-                ['Impressão de NF fiscal', false, true, 'opcional'],
+                ['Turmas / aulas em grupo', false, true, 'opcional'],
                 ['Desenvolvimento sob medida', false, false, true],
               ].map((row, i) => (
                 <tr key={i}>
@@ -484,7 +485,7 @@ function Pricing() {
             </tbody>
           </table>
         </div>
-        <p className="compare-note">Os módulos extras (NF, etiquetas, impressão fiscal) chegam em breve e custam R$ 30/mês cada, somados ao plano base.</p>
+        <p className="compare-note">Os módulos extras já estão disponíveis e custam entre R$ 29,90 e R$ 39,90/mês cada, somados ao plano base. Ative ou desative quando quiser, direto no sistema.</p>
       </div>
     </section>
   )
