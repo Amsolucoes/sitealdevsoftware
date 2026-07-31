@@ -1,0 +1,159 @@
+import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { apiGet, fmt } from './api'
+import { carregarCarrinho, salvarCarrinho } from './carrinho'
+import './loja.css'
+
+export function LojaAcessorios() {
+  const navigate = useNavigate()
+  const [produtos, setProdutos] = useState([])
+  const [carregando, setCarregando] = useState(true)
+  const [erro, setErro] = useState('')
+  const [carrinho, setCarrinho] = useState(carregarCarrinho())
+  const [mostrarCarrinho, setMostrarCarrinho] = useState(false)
+
+  useEffect(() => {
+    apiGet('/api/loja-acessorios/produtos')
+      .then(setProdutos)
+      .catch(() => setErro('Não foi possível carregar os produtos agora.'))
+      .finally(() => setCarregando(false))
+  }, [])
+
+  function adicionarAoCarrinho(produto) {
+    setCarrinho(prev => {
+      const existe = prev.find(i => i.produtoId === produto.id)
+      const novo = existe
+        ? prev.map(i => i.produtoId === produto.id ? { ...i, quantidade: i.quantidade + 1 } : i)
+        : [...prev, {
+            produtoId: produto.id,
+            nome: produto.nome,
+            preco: produto.precoPromocional ?? produto.preco,
+            quantidade: 1,
+          }]
+      salvarCarrinho(novo)
+      return novo
+    })
+    setMostrarCarrinho(true)
+  }
+
+  function alterarQtd(produtoId, delta) {
+    setCarrinho(prev => {
+      const novo = prev
+        .map(i => i.produtoId === produtoId ? { ...i, quantidade: i.quantidade + delta } : i)
+        .filter(i => i.quantidade > 0)
+      salvarCarrinho(novo)
+      return novo
+    })
+  }
+
+  function removerItem(produtoId) {
+    setCarrinho(prev => {
+      const novo = prev.filter(i => i.produtoId !== produtoId)
+      salvarCarrinho(novo)
+      return novo
+    })
+  }
+
+  const totalCarrinho = carrinho.reduce((s, i) => s + i.preco * i.quantidade, 0)
+  const qtdCarrinho = carrinho.reduce((s, i) => s + i.quantidade, 0)
+
+  function irParaCheckout() {
+    if (carrinho.length === 0) return
+    navigate('/loja/checkout')
+  }
+
+  return (
+    <div className="loja-page">
+      <header className="loja-header">
+        <a href="/" className="loja-logo">
+          <img src="/logo-aldevsoftware-padrao.png" alt="AL Dev Software" className="nav-logo-mark" />
+          AL Dev Software
+        </a>
+        <button className="loja-carrinho-btn" onClick={() => setMostrarCarrinho(v => !v)}>
+          🛒 Carrinho {qtdCarrinho > 0 && <span className="loja-carrinho-badge">{qtdCarrinho}</span>}
+        </button>
+      </header>
+
+      <div className="loja-hero">
+        <h1>Acessórios para o seu negócio</h1>
+        <p>Leitor de código de barras, impressora fiscal e impressora de etiquetas — compatíveis com o sistema.</p>
+      </div>
+
+      {carregando ? (
+        <p className="loja-msg">Carregando produtos...</p>
+      ) : erro ? (
+        <p className="loja-msg loja-erro">{erro}</p>
+      ) : produtos.length === 0 ? (
+        <p className="loja-msg">Nenhum produto disponível no momento.</p>
+      ) : (
+        <div className="loja-grid">
+          {produtos.map(p => {
+            const imagem = p.imagensUrls?.split(',')[0]
+            const precoFinal = p.precoPromocional ?? p.preco
+            return (
+              <div key={p.id} className="loja-card">
+                <div className="loja-card-img">
+                  {imagem ? <img src={imagem} alt={p.nome} /> : <span className="loja-card-placeholder">📦</span>}
+                </div>
+                <div className="loja-card-body">
+                  <h3>{p.nome}</h3>
+                  {p.descricao && <p className="loja-card-desc">{p.descricao}</p>}
+                  <div className="loja-card-preco">
+                    {p.precoPromocional && <span className="loja-card-de">{fmt(p.preco)}</span>}
+                    <span className="loja-card-por">{fmt(precoFinal)}</span>
+                  </div>
+                  {p.disponivel ? (
+                    <button className="btn-primary" onClick={() => adicionarAoCarrinho(p)}>Adicionar ao carrinho</button>
+                  ) : (
+                    <button className="btn-ghost" disabled>Fora de estoque</button>
+                  )}
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      )}
+
+      {mostrarCarrinho && (
+        <div className="loja-carrinho-overlay" onClick={e => e.target === e.currentTarget && setMostrarCarrinho(false)}>
+          <div className="loja-carrinho-painel">
+            <div className="loja-carrinho-head">
+              <h2>Seu carrinho</h2>
+              <button className="loja-fechar" onClick={() => setMostrarCarrinho(false)}>✕</button>
+            </div>
+            {carrinho.length === 0 ? (
+              <p className="loja-msg">Seu carrinho está vazio.</p>
+            ) : (
+              <>
+                <div className="loja-carrinho-itens">
+                  {carrinho.map(i => (
+                    <div key={i.produtoId} className="loja-carrinho-item">
+                      <div className="loja-carrinho-item-info">
+                        <span className="nome">{i.nome}</span>
+                        <span className="preco">{fmt(i.preco)}</span>
+                      </div>
+                      <div className="loja-carrinho-item-acoes">
+                        <button onClick={() => alterarQtd(i.produtoId, -1)}>−</button>
+                        <span>{i.quantidade}</span>
+                        <button onClick={() => alterarQtd(i.produtoId, 1)}>+</button>
+                        <button className="loja-remover" onClick={() => removerItem(i.produtoId)}>🗑</button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div className="loja-carrinho-total">
+                  <span>Subtotal</span>
+                  <strong>{fmt(totalCarrinho)}</strong>
+                </div>
+                <p className="loja-frete-aviso">O frete é calculado na próxima etapa.</p>
+                <button className="btn-primary" style={{ width: '100%', justifyContent: 'center' }} onClick={irParaCheckout}>
+                  Finalizar compra →
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
