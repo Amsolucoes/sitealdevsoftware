@@ -35,6 +35,7 @@ function Nav() {
         <a href="#perfis">Perfis</a>
         <a href="#precos">Preços</a>
         <a href="#duvidas">Dúvidas</a>
+        <a href="/loja" className="nav-login">🛒 Acessórios</a>
         <a href={LINK_ADMIN} target="_blank" rel="noreferrer" className="nav-login">Área do cliente</a>
         <a href={LINK_LOJA} target="_blank" rel="noreferrer" className="nav-cta">Acessar loja →</a>
       </div>
@@ -51,6 +52,7 @@ function Nav() {
         <a href="#precos" onClick={fechar}>Preços</a>
         <a href="#duvidas" onClick={fechar}>Dúvidas</a>
         <a href="#contato" onClick={fechar}>Contato</a>
+        <a href="/loja" onClick={fechar}>🛒 Acessórios</a>
         <div className="nav-mobile-divider" />
         <a href={LINK_ADMIN} target="_blank" rel="noreferrer" className="nav-mobile-login" onClick={fechar}>Área do cliente</a>
         <a href={LINK_LOJA} target="_blank" rel="noreferrer" className="nav-mobile-cta" onClick={fechar}>Acessar loja →</a>
@@ -598,7 +600,11 @@ function Footer() {
   )
 }
 
-export default function App() {
+import { Routes, Route } from 'react-router-dom'
+import { LojaAcessorios } from './loja/LojaAcessorios'
+import { CheckoutAcessorios } from './loja/CheckoutAcessorios'
+
+function Home() {
   return (
     <>
       <Nav />
@@ -612,5 +618,15 @@ export default function App() {
       <Contact />
       <Footer />
     </>
+  )
+}
+
+export default function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/loja" element={<LojaAcessorios />} />
+      <Route path="/loja/checkout" element={<CheckoutAcessorios />} />
+    </Routes>
   )
 }
