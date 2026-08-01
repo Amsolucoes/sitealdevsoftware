@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { apiGet, apiPost, fmt } from './api'
 import { carregarCarrinho, salvarCarrinho } from './carrinho'
 import './loja.css'
@@ -192,6 +192,7 @@ export function CheckoutAcessorios() {
 
       <div className="checkout-wrap">
         <form className="checkout-form" onSubmit={finalizarPedido}>
+          <Link to="/loja" className="produto-voltar">← Voltar para a loja</Link>
           <h2>Seus dados</h2>
           <div className="checkout-row">
             <input placeholder="Nome completo" value={form.nome}
