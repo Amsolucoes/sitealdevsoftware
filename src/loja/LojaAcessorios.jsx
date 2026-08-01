@@ -1,16 +1,17 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link, useSearchParams } from 'react-router-dom'
 import { apiGet, fmt } from './api'
 import { carregarCarrinho, salvarCarrinho } from './carrinho'
 import './loja.css'
 
 export function LojaAcessorios() {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const [produtos, setProdutos] = useState([])
   const [carregando, setCarregando] = useState(true)
   const [erro, setErro] = useState('')
   const [carrinho, setCarrinho] = useState(carregarCarrinho())
-  const [mostrarCarrinho, setMostrarCarrinho] = useState(false)
+  const [mostrarCarrinho, setMostrarCarrinho] = useState(searchParams.get('carrinho') === '1')
 
   useEffect(() => {
     apiGet('/api/loja-acessorios/produtos')
@@ -92,11 +93,13 @@ export function LojaAcessorios() {
             const precoFinal = p.precoPromocional ?? p.preco
             return (
               <div key={p.id} className="loja-card">
-                <div className="loja-card-img">
+                <Link to={`/loja/produto/${p.id}`} className="loja-card-img">
                   {imagem ? <img src={imagem} alt={p.nome} /> : <span className="loja-card-placeholder">📦</span>}
-                </div>
+                </Link>
                 <div className="loja-card-body">
-                  <h3>{p.nome}</h3>
+                  <Link to={`/loja/produto/${p.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                    <h3>{p.nome}</h3>
+                  </Link>
                   {p.descricao && <p className="loja-card-desc">{p.descricao}</p>}
                   <div className="loja-card-preco">
                     {p.precoPromocional && <span className="loja-card-de">{fmt(p.preco)}</span>}

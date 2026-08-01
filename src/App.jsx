@@ -602,6 +602,7 @@ function Footer() {
 
 import { Routes, Route } from 'react-router-dom'
 import { LojaAcessorios } from './loja/LojaAcessorios'
+import { ProdutoDetalhe } from './loja/ProdutoDetalhe'
 import { CheckoutAcessorios } from './loja/CheckoutAcessorios'
 
 function Home() {
@@ -626,6 +627,7 @@ export default function App() {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/loja" element={<LojaAcessorios />} />
+      <Route path="/loja/produto/:id" element={<ProdutoDetalhe />} />
       <Route path="/loja/checkout" element={<CheckoutAcessorios />} />
     </Routes>
   )
