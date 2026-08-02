@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { apiGet, apiPost, fmt } from './api'
 import { carregarCarrinho, salvarCarrinho } from './carrinho'
@@ -34,10 +34,17 @@ export function CheckoutAcessorios() {
   })
   const [buscandoCep, setBuscandoCep] = useState(false)
   const [frete, setFrete] = useState(null)
-  const [enviando, setEnviando] = useState(false)
   const [erro, setErro] = useState('')
-  const [pedido, setPedido] = useState(null) // { id, qrCode, qrCodeBase64 }
+  const [pedido, setPedido] = useState(null) // { id, qrCode, qrCodeBase64, subtotal, frete, total }
   const [statusPagamento, setStatusPagamento] = useState('aguardando_pagamento')
+
+  // etapa: 'dados' -> preenchendo endereço | 'pagamento' -> escolhe Pix/Cartão | 'pix' -> QR code
+  const [etapa, setEtapa] = useState('dados')
+  const [metodoPagamento, setMetodoPagamento] = useState('pix')
+  const [gerandoPix, setGerandoPix] = useState(false)
+  const [resultadoCartao, setResultadoCartao] = useState(null) // { status } após tentativa de pagamento
+  const brickContainerRef = useRef(null)
+  const brickInstanceRef = useRef(null)
 
   useEffect(() => {
     if (carrinho.length === 0 && !pedido) {
@@ -81,48 +88,61 @@ export function CheckoutAcessorios() {
   const subtotal = carrinho.reduce((s, i) => s + i.preco * i.quantidade, 0)
   const total = subtotal + (frete ?? 0)
 
-  async function finalizarPedido(e) {
-    e.preventDefault()
-    setErro('')
-
+  function validarDados() {
     if (!form.nome.trim() || !form.email.trim() || !form.telefone.trim() || !form.cpf.trim()) {
       setErro('Preencha nome, e-mail, telefone e CPF.')
-      return
+      return false
     }
     if (!form.cep.trim() || !form.endereco.trim() || !form.numero.trim() || !form.cidade.trim() || !form.uf.trim()) {
       setErro('Preencha o endereço completo, incluindo número.')
-      return
+      return false
     }
+    return true
+  }
 
-    setEnviando(true)
-    try {
-      const res = await apiPost('/api/loja-acessorios/pedidos', {
-        clienteNome: form.nome.trim(),
-        clienteEmail: form.email.trim(),
-        clienteTelefone: form.telefone.trim(),
-        clienteCpfCnpj: form.cpf.replace(/\D/g, ''),
-        cep: form.cep.trim(),
-        endereco: form.endereco.trim(),
-        numero: form.numero.trim(),
-        complemento: form.complemento.trim() || null,
-        bairro: form.bairro.trim() || null,
-        cidade: form.cidade.trim(),
-        uf: form.uf.trim(),
-        itens: carrinho.map(i => ({ produtoId: i.produtoId, quantidade: i.quantidade })),
-      })
-      setPedido({ ...res, subtotal, frete })
-      salvarCarrinho([])
-      setCarrinho([])
-    } catch (e) {
-      setErro(e.message || 'Erro ao gerar o pagamento. Tente novamente.')
-    } finally {
-      setEnviando(false)
+  function irParaPagamento(e) {
+    e.preventDefault()
+    setErro('')
+    if (!validarDados()) return
+    setEtapa('pagamento')
+  }
+
+  function payloadEndereco() {
+    return {
+      clienteNome: form.nome.trim(),
+      clienteEmail: form.email.trim(),
+      clienteTelefone: form.telefone.trim(),
+      clienteCpfCnpj: form.cpf.replace(/\D/g, ''),
+      cep: form.cep.trim(),
+      endereco: form.endereco.trim(),
+      numero: form.numero.trim(),
+      complemento: form.complemento.trim() || null,
+      bairro: form.bairro.trim() || null,
+      cidade: form.cidade.trim(),
+      uf: form.uf.trim(),
+      itens: carrinho.map(i => ({ produtoId: i.produtoId, quantidade: i.quantidade })),
     }
   }
 
-  // Polling do status do pagamento a cada 5s, enquanto aguarda
+  async function gerarPix() {
+    setErro('')
+    setGerandoPix(true)
+    try {
+      const res = await apiPost('/api/loja-acessorios/pedidos', payloadEndereco())
+      setPedido({ ...res, subtotal, frete })
+      salvarCarrinho([])
+      setCarrinho([])
+      setEtapa('pix')
+    } catch (e) {
+      setErro(e.message || 'Erro ao gerar o pagamento. Tente novamente.')
+    } finally {
+      setGerandoPix(false)
+    }
+  }
+
+  // Polling do status do pagamento Pix a cada 5s, enquanto aguarda
   useEffect(() => {
-    if (!pedido || statusPagamento !== 'aguardando_pagamento') return
+    if (etapa !== 'pix' || !pedido || statusPagamento !== 'aguardando_pagamento') return
     const intervalo = setInterval(async () => {
       try {
         const res = await apiGet(`/api/loja-acessorios/pedidos/${pedido.id}/status`)
@@ -134,19 +154,118 @@ export function CheckoutAcessorios() {
       }
     }, 5000)
     return () => clearInterval(intervalo)
-  }, [pedido, statusPagamento])
+  }, [etapa, pedido, statusPagamento])
 
-  // ── Tela de pagamento (Pix gerado) ──────────────────────────────
-  if (pedido) {
+  // Monta o Payment Brick quando o método "cartão" é escolhido
+  useEffect(() => {
+    if (etapa !== 'pagamento' || metodoPagamento !== 'cartao') return
+    if (!window.MercadoPago) {
+      setErro('Não foi possível carregar o pagamento por cartão. Recarregue a página e tente novamente.')
+      return
+    }
+
+    const publicKey = import.meta.env.VITE_MP_PUBLIC_KEY
+    const mp = new window.MercadoPago(publicKey, { locale: 'pt-BR' })
+    const bricksBuilder = mp.bricks()
+
+    async function montar() {
+      if (brickInstanceRef.current) {
+        brickInstanceRef.current.unmount()
+        brickInstanceRef.current = null
+      }
+      brickInstanceRef.current = await bricksBuilder.create('payment', 'brick-cartao-container', {
+        initialization: {
+          amount: total,
+          payer: { email: form.email.trim() },
+        },
+        customization: {
+          paymentMethods: {
+            creditCard: 'all',
+            debitCard: 'all',
+            maxInstallments: 12,
+          },
+          visual: {
+            style: { theme: 'dark' },
+          },
+        },
+        callbacks: {
+          onReady: () => {},
+          onError: (err) => {
+            console.error(err)
+            setErro('Erro ao carregar o formulário de pagamento.')
+          },
+          onSubmit: ({ formData }) => {
+            return new Promise((resolve, reject) => {
+              processarCartao(formData).then(resolve).catch(reject)
+            })
+          },
+        },
+      })
+    }
+    montar()
+
+    return () => {
+      if (brickInstanceRef.current) {
+        brickInstanceRef.current.unmount()
+        brickInstanceRef.current = null
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [etapa, metodoPagamento])
+
+  async function processarCartao(formData) {
+    setErro('')
+    try {
+      const res = await apiPost('/api/loja-acessorios/pedidos/cartao', {
+        ...payloadEndereco(),
+        token: formData.token,
+        paymentMethodId: formData.payment_method_id,
+        installments: formData.installments,
+        issuerId: formData.issuer_id,
+      })
+      salvarCarrinho([])
+      setCarrinho([])
+      setPedido({ ...res, subtotal, frete })
+      setResultadoCartao(res)
+      setEtapa('resultado')
+    } catch (e) {
+      setErro(e.message || 'Pagamento recusado. Confira os dados do cartão e tente novamente.')
+      throw e // deixa o Brick saber que falhou, pra reabilitar o formulário
+    }
+  }
+
+  // ── Tela de resultado do cartão (aprovado/recusado) ──────────────
+  if (etapa === 'resultado' && resultadoCartao) {
+    const aprovado = resultadoCartao.status === 'pago' || resultadoCartao.status === 'approved'
     return (
       <div className="loja-page">
-        <header className="loja-header">
-          <a href="/" className="loja-logo">
-            <img src="/logo-aldevsoftware-padrao.png" alt="AL Dev Software" className="nav-logo-mark" />
-            AL Dev Software
-          </a>
-        </header>
+        <Header />
+        <div className="checkout-pix">
+          {aprovado ? (
+            <div className="checkout-sucesso">
+              <span className="checkout-sucesso-icone">✓</span>
+              <h1>Pagamento aprovado!</h1>
+              <p>Seu pedido foi recebido e já vamos separar pra envio. Você vai receber atualizações por e-mail.</p>
+              <a href="/" className="btn-primary">Voltar ao site</a>
+            </div>
+          ) : (
+            <div className="checkout-sucesso">
+              <span className="checkout-sucesso-icone" style={{ background: 'rgba(224,123,107,0.15)', color: '#e07b6b' }}>!</span>
+              <h1>Pagamento em análise</h1>
+              <p>Seu pagamento está sendo processado. Você vai receber a confirmação por e-mail em breve.</p>
+              <a href="/" className="btn-primary">Voltar ao site</a>
+            </div>
+          )}
+        </div>
+      </div>
+    )
+  }
 
+  // ── Tela de pagamento Pix (QR code) ──────────────────────────────
+  if (etapa === 'pix' && pedido) {
+    return (
+      <div className="loja-page">
+        <Header />
         <div className="checkout-pix">
           {statusPagamento === 'pago' ? (
             <div className="checkout-sucesso">
@@ -184,18 +303,45 @@ export function CheckoutAcessorios() {
     )
   }
 
-  // ── Formulário de dados + endereço ──────────────────────────────
+  // ── Etapa 2: escolha do método de pagamento ──────────────────────
+  if (etapa === 'pagamento') {
+    return (
+      <div className="loja-page">
+        <Header />
+        <div className="checkout-wrap" style={{ gridTemplateColumns: '1fr' , maxWidth: 560}}>
+          <div className="checkout-form">
+            <button className="produto-voltar" style={{ background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left', padding: 0 }}
+              onClick={() => setEtapa('dados')}>
+              ← Voltar aos dados
+            </button>
+            <h2>Como você quer pagar?</h2>
+
+            <div className="cx-tipo-toggle" style={{ marginBottom: 16 }}>
+              <button type="button" className={metodoPagamento === 'pix' ? 'active' : ''} onClick={() => setMetodoPagamento('pix')}>Pix</button>
+              <button type="button" className={metodoPagamento === 'cartao' ? 'active' : ''} onClick={() => setMetodoPagamento('cartao')}>Cartão de crédito/débito</button>
+            </div>
+
+            {erro && <p className="checkout-erro">{erro}</p>}
+
+            {metodoPagamento === 'pix' ? (
+              <button className="btn-primary" disabled={gerandoPix} onClick={gerarPix} style={{ width: '100%', justifyContent: 'center' }}>
+                {gerandoPix ? 'Gerando pagamento...' : `Gerar Pix — ${fmt(total)}`}
+              </button>
+            ) : (
+              <div id="brick-cartao-container" ref={brickContainerRef} />
+            )}
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // ── Etapa 1: formulário de dados + endereço ──────────────────────
   return (
     <div className="loja-page">
-      <header className="loja-header">
-        <a href="/" className="loja-logo">
-          <img src="/logo-aldevsoftware-padrao.png" alt="AL Dev Software" className="nav-logo-mark" />
-          AL Dev Software
-        </a>
-      </header>
-
+      <Header />
       <div className="checkout-wrap">
-        <form className="checkout-form" onSubmit={finalizarPedido}>
+        <form className="checkout-form" onSubmit={irParaPagamento}>
           <Link to="/loja" className="produto-voltar">← Voltar para a loja</Link>
           <h2>Seus dados</h2>
           <div className="checkout-row">
@@ -209,7 +355,7 @@ export function CheckoutAcessorios() {
               onChange={e => setForm(f => ({ ...f, telefone: formatarTelefone(e.target.value) }))} />
           </div>
           <div className="checkout-row">
-            <input placeholder="CPF (necessário para gerar o Pix)" value={form.cpf}
+            <input placeholder="CPF" value={form.cpf}
               onChange={e => setForm(f => ({ ...f, cpf: formatarCpf(e.target.value) }))} />
           </div>
 
@@ -241,8 +387,8 @@ export function CheckoutAcessorios() {
 
           {erro && <p className="checkout-erro">{erro}</p>}
 
-          <button type="submit" className="btn-primary" disabled={enviando} style={{ width: '100%', justifyContent: 'center', marginTop: 10 }}>
-            {enviando ? 'Gerando pagamento...' : 'Ir para pagamento (Pix)'}
+          <button type="submit" className="btn-primary" style={{ width: '100%', justifyContent: 'center', marginTop: 10 }}>
+            Continuar para pagamento →
           </button>
         </form>
 
@@ -269,5 +415,16 @@ export function CheckoutAcessorios() {
         </div>
       </div>
     </div>
+  )
+}
+
+function Header() {
+  return (
+    <header className="loja-header">
+      <Link to="/" className="loja-logo">
+        <img src="/logo-aldevsoftware-padrao.png" alt="AL Dev Software" className="nav-logo-mark" />
+        AL Dev Software
+      </Link>
+    </header>
   )
 }
