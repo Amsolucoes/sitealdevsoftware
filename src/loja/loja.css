@@ -113,7 +113,9 @@
 
 .checkout-pix { max-width: 460px; margin: 60px auto; padding: 0 20px; text-align: center; }
 .checkout-pix h1 { font-size: 22px; font-weight: 700; margin-bottom: 8px; }
-.checkout-pix-valor { font-size: 28px; font-weight: 800; color: var(--amber-bright); font-family: 'Sora'; margin-bottom: 20px; }
+.checkout-pix-detalhe { display: flex; flex-direction: column; gap: 4px; margin-bottom: 8px; }
+.checkout-pix-detalhe div { display: flex; justify-content: space-between; font-size: 13px; color: var(--text-3); }
+.checkout-pix-valor { font-size: 28px; font-weight: 800; color: var(--amber-bright); font-family: 'Sora'; margin-bottom: 20px; margin-top: 4px; }
 .checkout-pix-qr { width: 220px; height: 220px; border-radius: 12px; background: #fff; padding: 10px; margin: 0 auto 20px; display: block; }
 .checkout-pix-copiacola { display: flex; gap: 8px; margin-bottom: 20px; }
 .checkout-pix-copiacola input { flex: 1; background: var(--bg-2); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; color: var(--text-2); font-size: 12px; }

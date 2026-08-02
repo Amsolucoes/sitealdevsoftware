@@ -110,7 +110,7 @@ export function CheckoutAcessorios() {
         uf: form.uf.trim(),
         itens: carrinho.map(i => ({ produtoId: i.produtoId, quantidade: i.quantidade })),
       })
-      setPedido(res)
+      setPedido({ ...res, subtotal, frete })
       salvarCarrinho([])
       setCarrinho([])
     } catch (e) {
@@ -158,6 +158,10 @@ export function CheckoutAcessorios() {
           ) : (
             <>
               <h1>Pague com Pix para confirmar</h1>
+              <div className="checkout-pix-detalhe">
+                <div><span>Subtotal</span><span>{fmt(pedido.subtotal)}</span></div>
+                <div><span>Frete</span><span>{fmt(pedido.frete)}</span></div>
+              </div>
               <p className="checkout-pix-valor">{fmt(pedido.total)}</p>
               {pedido.qrCodeBase64 && (
                 <img
