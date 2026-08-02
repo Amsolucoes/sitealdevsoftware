@@ -175,3 +175,24 @@
   .produto-detalhe-wrap { padding: 20px 18px 60px; }
   .produto-detalhe-grid { grid-template-columns: 1fr; gap: 24px; }
 }
+
+.cx-tipo-toggle {
+  display: flex;
+  gap: 8px;
+}
+.cx-tipo-toggle button {
+  flex: 1;
+  padding: 10px 0;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg-2);
+  color: var(--text-2);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+}
+.cx-tipo-toggle button.active {
+  background: var(--amber);
+  color: #1a1206;
+  border-color: var(--amber);
+}
