@@ -158,7 +158,7 @@ export function CheckoutAcessorios() {
           ) : (
             <>
               <h1>Pague com Pix para confirmar</h1>
-              <p className="checkout-pix-valor">{fmt(total)}</p>
+              <p className="checkout-pix-valor">{fmt(pedido.total)}</p>
               {pedido.qrCodeBase64 && (
                 <img
                   className="checkout-pix-qr"
