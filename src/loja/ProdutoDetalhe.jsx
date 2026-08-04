@@ -24,6 +24,8 @@ export function ProdutoDetalhe() {
     setZoomPos({ x, y })
   }
 
+  const [relacionados, setRelacionados] = useState([])
+
   useEffect(() => {
     setCarregando(true)
     apiGet(`/api/loja-acessorios/produtos/${id}`)
@@ -31,6 +33,13 @@ export function ProdutoDetalhe() {
       .catch(() => setErro('Produto não encontrado.'))
       .finally(() => setCarregando(false))
   }, [id])
+
+  useEffect(() => {
+    if (!produto) return
+    apiGet(`/api/loja-acessorios/produtos?categoria=${produto.categoria}`)
+      .then(lista => setRelacionados(lista.filter(p => p.id !== produto.id).slice(0, 4)))
+      .catch(() => {})
+  }, [produto])
 
   useEffect(() => {
     if (lightbox) {
@@ -166,6 +175,32 @@ export function ProdutoDetalhe() {
             )}
           </div>
         </div>
+
+        {relacionados.length > 0 && (
+          <div className="produto-relacionados">
+            <h2>Você também pode gostar</h2>
+            <div className="loja-grid" style={{ padding: 0 }}>
+              {relacionados.map(p => {
+                const img = p.imagensUrls?.split(',')[0]
+                const preco = p.precoPromocional ?? p.preco
+                return (
+                  <Link key={p.id} to={`/loja/produto/${p.id}`} className="loja-card" style={{ textDecoration: 'none', color: 'inherit' }}>
+                    <div className="loja-card-img">
+                      {img ? <img src={img} alt={p.nome} /> : <span className="loja-card-placeholder">📦</span>}
+                    </div>
+                    <div className="loja-card-body">
+                      <h3>{p.nome}</h3>
+                      <div className="loja-card-preco">
+                        {p.precoPromocional && <span className="loja-card-de">{fmt(p.preco)}</span>}
+                        <span className="loja-card-por">{fmt(preco)}</span>
+                      </div>
+                    </div>
+                  </Link>
+                )
+              })}
+            </div>
+          </div>
+        )}
       </div>
 
       {lightbox && imagens.length > 0 && (

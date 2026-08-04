@@ -262,7 +262,12 @@
 @media (max-width: 700px) {
   .loja-footer { padding: 32px 18px; }
   .loja-footer-grid { grid-template-columns: 1fr; gap: 24px; text-align: center; }
+  .produto-detalhe-wrap { padding: 20px 18px 60px; }
+  .produto-detalhe-grid { grid-template-columns: 1fr; gap: 24px; }
 }
+
+.produto-relacionados { margin-top: 56px; }
+.produto-relacionados h2 { font-size: 20px; font-weight: 700; margin-bottom: 20px; }
 
 .produto-galeria-principal { overflow: hidden; }
 .produto-galeria-principal img { transition: transform 0.15s ease-out; }
@@ -287,3 +292,18 @@
 @media (max-width: 700px) {
   .produto-galeria-principal img.zoom-ativo { transform: none; }
 }
+
+.loja-chips-wrap {
+  display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
+  max-width: 760px; margin: 20px auto 0;
+}
+button.loja-chip {
+  background: var(--bg-2); border: 1px solid var(--border); color: var(--text-2);
+  padding: 9px 18px; border-radius: 100px; font-size: 13px; font-weight: 500;
+  cursor: pointer; outline: none; box-shadow: none;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  white-space: nowrap;
+}
+button.loja-chip:hover { border-color: var(--amber-border); color: var(--text-1); }
+button.loja-chip.ativo { background: var(--amber); color: #1a1206; border-color: var(--amber); }
+button.loja-chip:focus-visible { box-shadow: 0 0 0 2px var(--amber-border); }
