@@ -120,8 +120,10 @@ export function LojaAcessorios() {
             const precoFinal = p.precoPromocional ?? p.preco
             return (
               <div key={p.id} className="loja-card">
-                <Link to={`/loja/produto/${p.id}`} className="loja-card-img">
+                <Link to={`/loja/produto/${p.id}`} className="loja-card-img" style={{ position: 'relative' }}>
                   {imagem ? <img src={imagem} alt={p.nome} /> : <span className="loja-card-placeholder">📦</span>}
+                  {p.destaque && <span className="loja-card-badge loja-card-badge-destaque">⭐ Mais vendido</span>}
+                  {!p.destaque && p.novo && <span className="loja-card-badge loja-card-badge-novo">Novo</span>}
                 </Link>
                 <div className="loja-card-body">
                   <Link to={`/loja/produto/${p.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
