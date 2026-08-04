@@ -133,7 +133,7 @@ export function LojaAcessorios() {
                     <span className="loja-card-por">{fmt(precoFinal)}</span>
                   </div>
                   {p.disponivel ? (
-                    <button className="btn-primary" onClick={() => adicionarAoCarrinho(p)}>Adicionar ao carrinho</button>
+                    <button className="btn-primary" onClick={e => { e.preventDefault(); adicionarAoCarrinho(p) }}>Adicionar ao carrinho</button>
                   ) : (
                     <button className="btn-ghost" disabled>Fora de estoque</button>
                   )}
