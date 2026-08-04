@@ -14,6 +14,7 @@ export function LojaAcessorios() {
   const [carrinho, setCarrinho] = useState(carregarCarrinho())
   const [mostrarCarrinho, setMostrarCarrinho] = useState(searchParams.get('carrinho') === '1')
   const [busca, setBusca] = useState('')
+  const [categoriaAtiva, setCategoriaAtiva] = useState('')
 
   useEffect(() => {
     apiGet('/api/loja-acessorios/produtos')
@@ -29,13 +30,14 @@ export function LojaAcessorios() {
     return categorias.find(c => c.chave === chave)?.nome ?? chave
   }
 
-  const produtosFiltrados = busca.trim()
-    ? produtos.filter(p => {
-        const termo = busca.toLowerCase()
-        return (p.descricao ?? '').toLowerCase().includes(termo) ||
-               labelCategoria(p.categoria).toLowerCase().includes(termo)
-      })
-    : produtos
+  const produtosFiltrados = produtos
+    .filter(p => !categoriaAtiva || p.categoria === categoriaAtiva)
+    .filter(p => {
+      if (!busca.trim()) return true
+      const termo = busca.toLowerCase()
+      return (p.descricao ?? '').toLowerCase().includes(termo) ||
+             labelCategoria(p.categoria).toLowerCase().includes(termo)
+    })
 
   function adicionarAoCarrinho(produto) {
     setCarrinho(prev => {
@@ -103,6 +105,23 @@ export function LojaAcessorios() {
             onChange={e => setBusca(e.target.value)}
           />
         </div>
+        {categorias.length > 0 && (
+          <div className="loja-chips-wrap">
+            <button
+              className={`loja-chip${categoriaAtiva === '' ? ' ativo' : ''}`}
+              onClick={() => setCategoriaAtiva('')}>
+              Todos
+            </button>
+            {categorias.map(c => (
+              <button
+                key={c.id}
+                className={`loja-chip${categoriaAtiva === c.chave ? ' ativo' : ''}`}
+                onClick={() => setCategoriaAtiva(c.chave)}>
+                {c.nome}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
       {carregando ? (
@@ -112,7 +131,9 @@ export function LojaAcessorios() {
       ) : produtos.length === 0 ? (
         <p className="loja-msg">Nenhum produto disponível no momento.</p>
       ) : produtosFiltrados.length === 0 ? (
-        <p className="loja-msg">Nenhum produto encontrado para "{busca}".</p>
+        <p className="loja-msg">
+          {busca.trim() ? `Nenhum produto encontrado para "${busca}".` : 'Nenhum produto nesta categoria.'}
+        </p>
       ) : (
         <div className="loja-grid">
           {produtosFiltrados.map(p => {
