@@ -8,17 +8,34 @@ export function LojaAcessorios() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const [produtos, setProdutos] = useState([])
+  const [categorias, setCategorias] = useState([])
   const [carregando, setCarregando] = useState(true)
   const [erro, setErro] = useState('')
   const [carrinho, setCarrinho] = useState(carregarCarrinho())
   const [mostrarCarrinho, setMostrarCarrinho] = useState(searchParams.get('carrinho') === '1')
+  const [busca, setBusca] = useState('')
 
   useEffect(() => {
     apiGet('/api/loja-acessorios/produtos')
       .then(setProdutos)
       .catch(() => setErro('Não foi possível carregar os produtos agora.'))
       .finally(() => setCarregando(false))
+    apiGet('/api/loja-acessorios/produtos/categorias')
+      .then(setCategorias)
+      .catch(() => {})
   }, [])
+
+  function labelCategoria(chave) {
+    return categorias.find(c => c.chave === chave)?.nome ?? chave
+  }
+
+  const produtosFiltrados = busca.trim()
+    ? produtos.filter(p => {
+        const termo = busca.toLowerCase()
+        return (p.descricao ?? '').toLowerCase().includes(termo) ||
+               labelCategoria(p.categoria).toLowerCase().includes(termo)
+      })
+    : produtos
 
   function adicionarAoCarrinho(produto) {
     setCarrinho(prev => {
@@ -78,6 +95,14 @@ export function LojaAcessorios() {
       <div className="loja-hero">
         <h1>Acessórios para o seu negócio</h1>
         <p>Leitor de código de barras, impressora fiscal e impressora de etiquetas — compatíveis com o sistema.</p>
+        <div className="loja-busca-wrap">
+          <input
+            className="loja-busca-input"
+            placeholder="Buscar por descrição ou categoria..."
+            value={busca}
+            onChange={e => setBusca(e.target.value)}
+          />
+        </div>
       </div>
 
       {carregando ? (
@@ -86,9 +111,11 @@ export function LojaAcessorios() {
         <p className="loja-msg loja-erro">{erro}</p>
       ) : produtos.length === 0 ? (
         <p className="loja-msg">Nenhum produto disponível no momento.</p>
+      ) : produtosFiltrados.length === 0 ? (
+        <p className="loja-msg">Nenhum produto encontrado para "{busca}".</p>
       ) : (
         <div className="loja-grid">
-          {produtos.map(p => {
+          {produtosFiltrados.map(p => {
             const imagem = p.imagensUrls?.split(',')[0]
             const precoFinal = p.precoPromocional ?? p.preco
             return (
