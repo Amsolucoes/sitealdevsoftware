@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
-import { apiGet, fmt } from './api'
+import { apiGet, apiPost, fmt } from './api'
 import { carregarCarrinho, salvarCarrinho } from './carrinho'
+import { Estrelas } from './LojaAcessorios'
 import './loja.css'
 
 export function ProdutoDetalhe() {
@@ -25,6 +26,39 @@ export function ProdutoDetalhe() {
   }
 
   const [relacionados, setRelacionados] = useState([])
+  const [avaliacoes, setAvaliacoes] = useState({ media: 0, total: 0, avaliacoes: [] })
+  const [formAval, setFormAval] = useState({ email: '', nota: 0, comentario: '' })
+  const [enviandoAval, setEnviandoAval] = useState(false)
+  const [erroAval, setErroAval] = useState('')
+  const [avalEnviada, setAvalEnviada] = useState(false)
+
+  function carregarAvaliacoes() {
+    apiGet(`/api/loja-acessorios/produtos/${id}/avaliacoes`).then(setAvaliacoes).catch(() => {})
+  }
+
+  useEffect(() => { carregarAvaliacoes() }, [id])
+
+  async function enviarAvaliacao(e) {
+    e.preventDefault()
+    setErroAval('')
+    if (!formAval.email.trim()) { setErroAval('Informe o e-mail usado na compra.'); return }
+    if (!formAval.nota) { setErroAval('Escolha uma nota de 1 a 5 estrelas.'); return }
+    setEnviandoAval(true)
+    try {
+      await apiPost('/api/loja-acessorios/produtos/avaliacoes', {
+        produtoId: id,
+        email: formAval.email.trim(),
+        nota: formAval.nota,
+        comentario: formAval.comentario.trim() || null,
+      })
+      setAvalEnviada(true)
+      carregarAvaliacoes()
+    } catch (e2) {
+      setErroAval(e2.message || 'Erro ao enviar avaliação.')
+    } finally {
+      setEnviandoAval(false)
+    }
+  }
 
   useEffect(() => {
     setCarregando(true)
@@ -202,6 +236,62 @@ export function ProdutoDetalhe() {
             </div>
           </div>
         )}
+
+        <div className="avaliacoes-secao">
+          <h2>Avaliações</h2>
+          {avaliacoes.total > 0 ? (
+            <div className="avaliacoes-resumo">
+              <Estrelas media={avaliacoes.media} total={avaliacoes.total} tamanho={18} />
+              <strong>{avaliacoes.media}</strong>
+              <span style={{ color: 'var(--text-3)', fontSize: 13 }}>de 5 · {avaliacoes.total} avaliação(ões)</span>
+            </div>
+          ) : (
+            <p style={{ color: 'var(--text-3)', fontSize: 14, marginBottom: 20 }}>Este produto ainda não tem avaliações.</p>
+          )}
+
+          {avaliacoes.avaliacoes.map(a => (
+            <div key={a.id} className="avaliacao-item">
+              <div className="avaliacao-item-topo">
+                <span className="avaliacao-item-nome">{a.clienteNome}</span>
+                <span className="avaliacao-item-data">{new Date(a.criadoEm).toLocaleDateString('pt-BR')}</span>
+              </div>
+              <Estrelas media={a.nota} total={1} tamanho={13} />
+              {a.comentario && <p className="avaliacao-item-comentario">{a.comentario}</p>}
+            </div>
+          ))}
+
+          <div className="avaliacao-form">
+            {avalEnviada ? (
+              <p className="avaliacao-form-ok">✓ Avaliação enviada, obrigado!</p>
+            ) : (
+              <form onSubmit={enviarAvaliacao}>
+                <h3>Já comprou? Deixe sua avaliação</h3>
+                <div className="avaliacao-form-estrelas">
+                  {[1, 2, 3, 4, 5].map(n => (
+                    <button key={n} type="button"
+                      className={n <= formAval.nota ? 'selecionada' : ''}
+                      onClick={() => setFormAval(f => ({ ...f, nota: n }))}>★</button>
+                  ))}
+                </div>
+                <input
+                  type="email" placeholder="E-mail usado na compra"
+                  value={formAval.email}
+                  onChange={e => setFormAval(f => ({ ...f, email: e.target.value }))}
+                  style={{ marginBottom: 12 }}
+                />
+                <textarea
+                  placeholder="Comentário (opcional)"
+                  value={formAval.comentario}
+                  onChange={e => setFormAval(f => ({ ...f, comentario: e.target.value }))}
+                />
+                {erroAval && <p className="checkout-erro" style={{ marginBottom: 12 }}>{erroAval}</p>}
+                <button type="submit" className="btn-primary" disabled={enviandoAval}>
+                  {enviandoAval ? 'Enviando...' : 'Enviar avaliação'}
+                </button>
+              </form>
+            )}
+          </div>
+        </div>
       </div>
 
       {lightbox && imagens.length > 0 && (

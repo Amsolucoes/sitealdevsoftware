@@ -4,6 +4,19 @@ import { apiGet, fmt } from './api'
 import { carregarCarrinho, salvarCarrinho } from './carrinho'
 import './loja.css'
 
+export function Estrelas({ media, total, tamanho = 13 }) {
+  if (!total) return null
+  const cheias = Math.round(media)
+  return (
+    <div className="loja-estrelas" style={{ fontSize: tamanho }}>
+      {[1, 2, 3, 4, 5].map(i => (
+        <span key={i} className={i <= cheias ? 'estrela-cheia' : 'estrela-vazia'}>★</span>
+      ))}
+      <span className="loja-estrelas-total">({total})</span>
+    </div>
+  )
+}
+
 export function LojaAcessorios() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
@@ -150,6 +163,7 @@ export function LojaAcessorios() {
                   <Link to={`/loja/produto/${p.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
                     <h3>{p.nome}</h3>
                   </Link>
+                  <Estrelas media={p.mediaAvaliacoes} total={p.totalAvaliacoes} />
                   {p.descricao && <p className="loja-card-desc">{p.descricao}</p>}
                   <div className="loja-card-preco">
                     {p.precoPromocional && <span className="loja-card-de">{fmt(p.preco)}</span>}
