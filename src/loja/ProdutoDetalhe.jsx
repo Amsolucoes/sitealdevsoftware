@@ -139,10 +139,11 @@ export function ProdutoDetalhe() {
 
           <div className="produto-info">
             <h1>{produto.nome}</h1>
-            <div className="loja-card-preco" style={{ marginTop: 8, marginBottom: 16 }}>
+            <div className="loja-card-preco" style={{ marginTop: 8 }}>
               {produto.precoPromocional && <span className="loja-card-de">{fmt(produto.preco)}</span>}
               <span className="loja-card-por" style={{ fontSize: 28 }}>{fmt(precoFinal)}</span>
             </div>
+            <p className="loja-card-parcelas" style={{ marginBottom: 16 }}>ou em até 12x no cartão de crédito</p>
 
             {produto.descricao && <p className="produto-descricao">{produto.descricao}</p>}
 

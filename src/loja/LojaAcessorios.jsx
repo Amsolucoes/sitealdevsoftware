@@ -155,6 +155,7 @@ export function LojaAcessorios() {
                     {p.precoPromocional && <span className="loja-card-de">{fmt(p.preco)}</span>}
                     <span className="loja-card-por">{fmt(precoFinal)}</span>
                   </div>
+                  <p className="loja-card-parcelas">ou em até 12x no cartão</p>
                   {p.disponivel ? (
                     <button className="btn-primary" onClick={e => { e.preventDefault(); adicionarAoCarrinho(p) }}>Adicionar ao carrinho</button>
                   ) : (
