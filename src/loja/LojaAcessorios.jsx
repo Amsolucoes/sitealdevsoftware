@@ -144,6 +144,28 @@ export function LojaAcessorios() {
         </div>
       )}
 
+      <footer className="loja-footer">
+        <div className="loja-footer-grid">
+          <div className="loja-footer-col">
+            <h4>Fale conosco</h4>
+            <a href="https://wa.me/5567982036545" target="_blank" rel="noreferrer">📱 (67) 98203-6545</a>
+          </div>
+          <div className="loja-footer-col">
+            <h4>Trocas e entrega</h4>
+            <p>Trocas em até 7 dias após o recebimento.</p>
+            <p>Entrega em até 5 dias úteis, conforme o Correios.</p>
+          </div>
+          <div className="loja-footer-col">
+            <h4>Empresa</h4>
+            <p>AL Dev Software</p>
+            <p>MEI: 66.783.439/0001-46</p>
+          </div>
+        </div>
+        <div className="loja-footer-bottom">
+          © {new Date().getFullYear()} AL Dev Software. Todos os direitos reservados.
+        </div>
+      </footer>
+
       {mostrarCarrinho && (
         <div className="loja-carrinho-overlay" onClick={e => e.target === e.currentTarget && setMostrarCarrinho(false)}>
           <div className="loja-carrinho-painel">
