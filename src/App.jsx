@@ -25,7 +25,7 @@ function Nav() {
   return (
     <nav className="nav">
       <a href="#top" className="nav-logo" onClick={fechar}>
-        <img src="/logo-aldevsoftware-padrao.png" alt="AL Dev Software" className="nav-logo-mark" />
+        <img src="/logo-aldevsoftware-padrao.png" alt="AL Dev Software" className="nav-logo-mark" width="30" height="30" />
         AL Dev Software
       </a>
       <div className="nav-links">
@@ -208,7 +208,7 @@ const PLANS = [
   {
     tag: 'módulos disponíveis', name: 'Loja + Módulos', desc: 'Acople módulos extras conforme sua loja cresce.', featured: true,
     value: 'Base + ', big: 'R$ 29,90', note: 'por módulo · ative e desative quando quiser, sem contrato',
-    feats: ['Tudo do plano Loja', 'Financeiro completo (+R$29,90)', 'Importação de NF via XML (+R$29,90)', 'Turmas / aulas em grupo (+R$39,90)'],
+    feats: ['Tudo do plano Loja', 'Financeiro completo (+R$29,90)', 'Ordem de Serviço p/ oficina (+R$49,90) 🆕', 'Funcionários, NF, Turmas e mais 4 módulos'],
     cta: 'cadastro',
   },
   {
@@ -381,6 +381,28 @@ function Perfis() {
       tamanho: 'Número (33 a 44)',
       cor: 'Sim',
     },
+    {
+      icon: '🐾', nome: 'Pet Shop',
+      desc: 'Para pet shops: ração a granel, petiscos e acessórios.',
+      categorias: 'Ração, Petiscos, Brinquedos, Higiene, Acessórios, Medicamentos',
+      tamanho: 'Sem tamanho (controle por peso/embalagem)',
+      cor: 'Não',
+    },
+    {
+      icon: '🧱', nome: 'Material de Construção',
+      desc: 'Para lojas de materiais de construção e ferragens.',
+      categorias: 'Cimento, Tijolos, Tintas, Hidráulica, Elétrica, Ferramentas',
+      tamanho: 'Sem tamanho',
+      cor: 'Não',
+    },
+    {
+      icon: '🔧', nome: 'Oficina / Auto Peças', badge: 'novo',
+      desc: 'Para oficinas mecânicas e lojas de autopeças, pneus e acessórios.',
+      categorias: 'Peças, Óleo e Lubrificantes, Pneus e Rodas, Baterias, Ferramentas',
+      tamanho: 'Sem tamanho (controle por peça/modelo)',
+      cor: 'Não',
+      extra: 'Inclui o módulo Ordem de Serviço: checklist de inspeção, orçamento por veículo e comissão de mecânicos.',
+    },
   ]
   return (
     <section className="section" id="perfis">
@@ -392,7 +414,10 @@ function Perfis() {
       <div className="perfis-grid">
         {perfis.map((p, i) => (
           <div className="perfil-card reveal" key={i} style={{ transitionDelay: `${i * 80}ms` }}>
-            <span className="perfil-icon">{p.icon}</span>
+            <div className="perfil-head">
+              <span className="perfil-icon">{p.icon}</span>
+              {p.badge && <span className="perfil-badge">{p.badge}</span>}
+            </div>
             <h3>{p.nome}</h3>
             <p className="perfil-desc">{p.desc}</p>
             <div className="perfil-rows">
@@ -408,11 +433,21 @@ function Perfis() {
                 <span className="perfil-key">Cor / variação</span>
                 <span className="perfil-val">{p.cor}</span>
               </div>
+              {p.extra && (
+                <div className="perfil-row">
+                  <span className="perfil-key">Módulo extra</span>
+                  <span className="perfil-val">{p.extra}</span>
+                </div>
+              )}
             </div>
           </div>
         ))}
       </div>
-      <p className="perfis-note">Precisa de um ramo diferente? A gente cria um perfil sob medida para a sua loja.</p>
+      <p className="perfis-note">
+        Também temos perfis prontos para Conveniência, Barbearia, Salão de Beleza, Banho e Tosa,
+        Chácara/Temporada, Turmas, Corretora de Seguros e Financeiro Puro (controle financeiro sem loja).
+        Não achou o seu? A gente cria um perfil sob medida para a sua loja.
+      </p>
     </section>
   )
 }
@@ -469,8 +504,14 @@ function Pricing() {
                 ['Cobrança automática via Pix', true, true, '—'],
                 ['Suporte seg a sex via WhatsApp', true, true, true],
                 ['Financeiro completo (contas, cartão)', false, true, 'opcional'],
+                ['Funcionários (comissão e pagamento)', false, true, 'opcional'],
                 ['Importação de NF via XML', false, true, 'opcional'],
+                ['Ordem de Serviço (oficina/auto peças) 🆕', false, true, 'opcional'],
+                ['Impressão de etiquetas', false, true, 'opcional'],
+                ['Cupom não fiscal (impressora térmica)', false, true, 'opcional'],
                 ['Turmas / aulas em grupo', false, true, 'opcional'],
+                ['Reservas (chácara/temporada)', false, true, 'opcional'],
+                ['Emissão de NF-e/NFC-e', 'em breve', 'em breve', 'opcional'],
                 ['Desenvolvimento sob medida', false, false, true],
               ].map((row, i) => (
                 <tr key={i}>
@@ -487,7 +528,7 @@ function Pricing() {
             </tbody>
           </table>
         </div>
-        <p className="compare-note">Os módulos extras já estão disponíveis e custam entre R$ 29,90 e R$ 39,90/mês cada, somados ao plano base. Ative ou desative quando quiser, direto no sistema.</p>
+        <p className="compare-note">Os módulos extras já estão disponíveis e custam entre R$ 29,90 e R$ 49,90/mês cada, somados ao plano base. Ative ou desative quando quiser, direto no sistema.</p>
       </div>
     </section>
   )
@@ -518,6 +559,10 @@ const PERGUNTAS = [
     q: 'Tem período de teste grátis?',
     a: 'Sim, 7 dias grátis pra testar o sistema completo, sem precisar cadastrar cartão de crédito. Se decidir continuar, é só escolher a forma de pagamento depois do trial.',
   },
+  {
+    q: 'Tem plano para oficina mecânica ou loja de autopeças?',
+    a: 'Sim! O perfil "Oficina / Auto Peças" já vem com categorias de peças, óleo, pneus e ferramentas. E o módulo Ordem de Serviço adiciona checklist de inspeção do veículo, orçamento por placa/cliente com itens de serviço e peça, comissão de mecânicos e controle de patrimônio (ferramentas e equipamentos).',
+  },
 ];
 
 function Faq() {
@@ -534,11 +579,11 @@ function Faq() {
       <div className="faq-list">
         {PERGUNTAS.map((item, i) => (
           <div key={i} className={`faq-item reveal${aberto === i ? ' open' : ''}`} style={{ transitionDelay: `${i * 40}ms` }}>
-            <button className="faq-question" onClick={() => setAberto(aberto === i ? null : i)}>
+            <button className="faq-question" aria-expanded={aberto === i} aria-controls={`faq-answer-${i}`} onClick={() => setAberto(aberto === i ? null : i)}>
               {item.q}
               <span className="faq-icon">+</span>
             </button>
-            <div className="faq-answer">
+            <div className="faq-answer" id={`faq-answer-${i}`}>
               <p>{item.a}</p>
             </div>
           </div>
@@ -571,10 +616,10 @@ function Contact() {
         </div>
         <form className="contact-form" onSubmit={enviar}>
           <div className="row">
-            <input placeholder="Seu nome" value={form.nome} onChange={e => setForm(f => ({ ...f, nome: e.target.value }))} />
-            <input placeholder="E-mail ou telefone" value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} />
+            <input aria-label="Seu nome" placeholder="Seu nome" value={form.nome} onChange={e => setForm(f => ({ ...f, nome: e.target.value }))} />
+            <input aria-label="E-mail ou telefone" placeholder="E-mail ou telefone" value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} />
           </div>
-          <textarea rows={4} placeholder="Conte o que você precisa..." value={form.msg} onChange={e => setForm(f => ({ ...f, msg: e.target.value }))} />
+          <textarea aria-label="Mensagem" rows={4} placeholder="Conte o que você precisa..." value={form.msg} onChange={e => setForm(f => ({ ...f, msg: e.target.value }))} />
           <button type="submit" className="btn-primary">{sent ? 'Abrindo WhatsApp...' : 'Enviar mensagem'}</button>
         </form>
       </div>
@@ -586,7 +631,7 @@ function Footer() {
   return (
     <footer className="footer">
       <div>
-        <div className="footer-logo"><img src="/logo-aldevsoftware-padrao.png" alt="AL Dev Software" className="nav-logo-mark" />AL Dev Software</div>
+        <div className="footer-logo"><img src="/logo-aldevsoftware-padrao.png" alt="AL Dev Software" className="nav-logo-mark" width="30" height="30" />AL Dev Software</div>
         <p style={{ marginTop: 8 }}>Desenvolvimento de software e gestão para lojas.</p>
       </div>
       <div className="footer-links">
