@@ -5,6 +5,9 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="AL Dev Software — desenvolvimento de software sob medida e sistema completo de gestão para lojas, oficinas e prestadores de serviço. Automatize vendas, estoque, clientes e cobranças." />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+    <meta name="keywords" content="AL Dev Software, aldevsoftware, sistema para loja, sistema de gestão, PDV, controle de estoque, sistema para barbearia, sistema para oficina, software sob medida" />
+    <meta name="author" content="AL Dev Software" />
     <link rel="canonical" href="https://aldevsoftware.com.br/" />
     <title>AL Dev Software — Software sob medida e gestão para lojas</title>
 
@@ -40,10 +43,52 @@
       }
     </script>
 
+    <!-- Identidade da marca para o Google (ajuda nas buscas por "AL Dev Software" / "aldevsoftware") -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Organization",
+            "@id": "https://aldevsoftware.com.br/#organizacao",
+            "name": "AL Dev Software",
+            "alternateName": ["AL Dev", "aldevsoftware", "aldevsoftware.com.br"],
+            "url": "https://aldevsoftware.com.br/",
+            "logo": "https://aldevsoftware.com.br/logo-aldevsoftware-padrao.png",
+            "email": "andre.ivarras@gmail.com",
+            "areaServed": "BR"
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://aldevsoftware.com.br/#site",
+            "url": "https://aldevsoftware.com.br/",
+            "name": "AL Dev Software",
+            "alternateName": "aldevsoftware.com.br",
+            "inLanguage": "pt-BR",
+            "publisher": { "@id": "https://aldevsoftware.com.br/#organizacao" }
+          }
+        ]
+      }
+    </script>
+
     <script src="https://sdk.mercadopago.com/js/v2"></script>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <!-- Conteúdo mínimo para quem não executa JavaScript (robôs de busca, pré-visualizações). O React substitui ao carregar. -->
+      <main style="font-family:sans-serif;max-width:720px;margin:48px auto;padding:0 20px;color:#222">
+        <h1>AL Dev Software — sistemas sob medida e gestão completa para a sua loja</h1>
+        <p>Desenvolvemos software personalizado e oferecemos um sistema pronto para controlar vendas, estoque, clientes e cobranças, para lojas, oficinas e prestadores de serviço.</p>
+        <ul>
+          <li>PDV / Caixa, estoque e cadastro de produtos</li>
+          <li>Clientes, agenda, planos de assinatura e comissões</li>
+          <li>Financeiro, contas a pagar e receber, cartões e planejamento</li>
+          <li>Cobrança automática via Pix · 7 dias grátis</li>
+        </ul>
+        <p><a href="https://app.aldevsoftware.com.br/cadastro">Testar grátis por 7 dias</a> · <a href="/loja">Loja de acessórios</a></p>
+      </main>
+    </div>
+    <noscript>Ative o JavaScript para ver o site AL Dev Software completo.</noscript>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

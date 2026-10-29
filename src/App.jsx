@@ -645,7 +645,7 @@ function Footer() {
   )
 }
 
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, useLocation } from 'react-router-dom'
 import { LojaAcessorios } from './loja/LojaAcessorios'
 import { ProdutoDetalhe } from './loja/ProdutoDetalhe'
 import { CheckoutAcessorios } from './loja/CheckoutAcessorios'
@@ -667,7 +667,17 @@ function Home() {
   )
 }
 
+const TITULO_PADRAO = 'AL Dev Software — Software sob medida e gestão para lojas'
+
 export default function App() {
+  const { pathname } = useLocation()
+  // Título da aba/resultado de busca por página
+  useEffect(() => {
+    document.title = pathname.startsWith('/loja')
+      ? 'Loja de acessórios — AL Dev Software'
+      : TITULO_PADRAO
+  }, [pathname])
+
   return (
     <Routes>
       <Route path="/" element={<Home />} />
